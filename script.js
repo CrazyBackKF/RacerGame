@@ -40,21 +40,11 @@ function animate()
     
     if (!player.isGameOver)
     {
-        ctx.fillStyle = "green";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < 5; i++)
-        {
-            const scaledHeight = canvas.height / 5 * i
-            ctx.strokeStyle = "black";
-            ctx.beginPath();
-            ctx.moveTo(0, scaledHeight);
-            ctx.lineTo(canvas.width, scaledHeight);
-            ctx.stroke();
-        }
+        drawBackground();
 
-        if (Math.random() < 0.01 && Date.now() - lastDate >= 1000)
+        if (Math.random() < 0.01 && Date.now() - lastDate >= (1500 * (1 - (multiplier / 5))))
         {
-            const line = Math.floor(Math.random() * 5);
+            const line = Math.floor(Math.random() * 4);
             const randomImage = Math.floor(Math.random() * 12) + 1
             const scale = {
                 x: 0,
@@ -128,9 +118,16 @@ canvas.addEventListener("click", (e) => {
     {
         player.randomImage = Math.floor(Math.random() * 4) + 1;
         player.image.src = `img/player${player.randomImage}.png`
+        background.velocity = 1;
+        Obstacle.velocity = 1;
+        player.position.x = canvas.width - player.width - 50;
         score = 1;
+        lastDate = 0;
+        multiplier = 1;
+        frame = 0;
         player.line = 2;
-        player.position.y =  player.line * player.lineHeight + (player.lineHeight / 2 - player.height / 2)
+        player.position.y = player.line * player.lineHeight + player.lineHeight / 2 + player.height / 2
+        player.canMove = true;
         player.isGameOver = false;
         canvas.style.cursor = "default"
     }

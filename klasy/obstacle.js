@@ -19,17 +19,17 @@ const carType = {
 
 
 class Obstacle {
+    static velocity = 1;
     constructor(line, scale, imageSrc)
     {
         this.width = 100,
         this.height = 50;
-        this.velocity = 1
-        this.lineHeight = canvas.height / 5;
+        this.lineHeight = 119;
         this.scale = scale;
         this.line = line;
         this.position = {
             x: 0 - this.width,
-            y: this.line * this.lineHeight + (this.lineHeight / 2 - this.height / 2)
+            y: this.line * this.lineHeight + this.lineHeight / 2 + this.height / 2
         }
         this.image = new Image()
         this.image.src = imageSrc;
@@ -58,6 +58,6 @@ class Obstacle {
     move()
     {
 
-        this.position.x += (this.velocity * multiplier)
+        this.position.x += (Obstacle.velocity * multiplier)
     }
 }

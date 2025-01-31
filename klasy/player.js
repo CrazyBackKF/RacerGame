@@ -1,17 +1,22 @@
+background =  {
+    velocity: 1
+}
+
 class Player {
     constructor() {
-        this.width = 100,
-        this.height = 50
+        this.width = 100;
+        this.height = 50;
+        this.line = 2;
+        this.lineHeight = 119
+        this.canMove = true;
         this.position = {
             x: canvas.width - this.width - 50,
-            y: (canvas.height - this.height) / 2
+            y: this.line * this.lineHeight + this.lineHeight / 2 + this.height / 2
         }
         this.key = {
             w: false,
             s: false
         }
-        this.line = 2;
-        this.lineHeight = canvas.height / 5;
         this.isGameOver = false;
         this.randomImage = Math.floor(Math.random() * 4) + 1;
         this.image = new Image();
@@ -41,24 +46,24 @@ class Player {
 
     move()
     {
-        if (this.isGameOver) return;
+        if (!this.canMove || this.isGameOver) return;
         if (this.key.w) 
         {
             if(this.line != 0) this.line--;
             else this.line = 0;
             this.key.w = false;
             gsap.to(this.position, {
-                y: this.line * this.lineHeight + (this.lineHeight / 2 - this.height / 2),
+                y: this.line * this.lineHeight + this.lineHeight / 2 + this.height / 2,
                 duration: 0.3
             });
         }
         if (this.key.s) 
         {
-            if(this.line != 4) this.line++;
-            else this.line = 4;
+            if(this.line != 3) this.line++;
+            else this.line = 3;
             this.key.s = false;
             gsap.to(this.position, {
-                y: this.line * this.lineHeight + (this.lineHeight / 2 - this.height / 2),
+                y: this.line * this.lineHeight + this.lineHeight / 2 + this.height / 2,
                 duration: 0.3
             });
         }
@@ -82,7 +87,26 @@ class Player {
 
     gameOver()
     {
-        obstacles = [];
-        this.isGameOver = true;
+        this.canMove = false;
+        gsap.to(this.position, {
+            x: this.position.x + 20,
+            duration: 2,
+            ease: "expo.out"
+        })
+        
+        gsap.to(background, {
+            velocity: 0,
+            duration: 3
+        })
+
+        gsap.to(Obstacle, {
+            velocity: -2,
+            ease: "power3.out",
+            duration: 3,
+            onComplete: () => {
+                obstacles = [];
+                this.isGameOver = true;
+            }
+        })
     }
 }
