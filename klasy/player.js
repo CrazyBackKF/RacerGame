@@ -8,7 +8,6 @@ class Player {
         this.height = 50;
         this.line = 2;
         this.lineHeight = 119
-        this.canMove = true;
         this.position = {
             x: canvas.width - this.width - 50,
             y: this.line * this.lineHeight + this.lineHeight / 2 + this.height / 2
@@ -46,7 +45,7 @@ class Player {
 
     move()
     {
-        if (!this.canMove || this.isGameOver) return;
+        if (this.isGameOver) return;
         if (this.key.w) 
         {
             if(this.line != 0) this.line--;
@@ -87,7 +86,7 @@ class Player {
 
     gameOver()
     {
-        this.canMove = false;
+        this.canMove = false
         gsap.to(this.position, {
             x: this.position.x + 20,
             duration: 2,
