@@ -35,5 +35,20 @@ function drawBackground()
     ctx.moveTo(0, canvas.height / 2 + (canvas.height / 2 - 50) / 2);
     ctx.lineTo(canvas.width, canvas.height / 2 + (canvas.height / 2 - 50) / 2);
     ctx.stroke();
+}
 
+function checkClick(e)
+{
+    const mouseX = e.offsetX;
+    const mouseY = e.offsetY;
+    let canvasRect = canvas.getBoundingClientRect(); // Pobieranie pozycji canvasu na ekranie
+    let scaleX = canvas.width / canvasRect.width; // Skala w poziomie
+    let scaleY = canvas.height / canvasRect.height; // Skala w pionie
+
+    let mouseXRelative = (mouseX - canvasRect.left) * scaleX;
+    let mouseYRelative = (mouseY - canvasRect.top) * scaleY;
+
+    return ((mouseX <= ((canvas.width - 260) / 2 + 250) && mouseX >= (canvas.width - 260) / 2 &&
+    mouseY <= canvas.height - 150 + 100 && mouseY >= canvas.height - 150) || (mouseXRelative <= ((canvas.width - 260) / 2 + 250) && mouseXRelative >= (canvas.width - 260) / 2 &&
+    mouseYRelative <= canvas.height - 150 + 100 && mouseYRelative >= canvas.height - 150))
 }

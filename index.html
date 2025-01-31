@@ -8,6 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Racer Game</title>
     <style>
+        body {
+            background-color: black;
+        }
+
         canvas {
             width: 1024;
             display: block;
@@ -25,6 +29,7 @@
 
         #fullscreen {
             position: absolute;
+            color: white;
             top: 10px;
             right: 0;
             width: 40px;
@@ -39,7 +44,8 @@
         }
 
         #fullscreen:hover {
-            transform: scale(2, 2);
+            transform: scale(2, 2) rotate(90deg);
+            color: rgb(255, 165, 0);
         }
 
     </style>
@@ -49,15 +55,15 @@
         <canvas width="1024" height="576"></canvas>
         <button id="fullscreen">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 3H10V5H5V10H3V3Z" fill="black"/>
-                <path d="M21 3V10H19V5H14V3H21Z" fill="black"/>
-                <path d="M3 21V14H5V19H10V21H3Z" fill="black"/>
-                <path d="M21 21H14V19H19V14H21V21Z" fill="black"/>
+                <path d="M3 3H10V5H5V10H3V3Z" fill="currentColor"/>
+                <path d="M21 3V10H19V5H14V3H21Z" fill="currentColor"/>
+                <path d="M3 21V14H5V19H10V21H3Z" fill="currentColor"/>
+                <path d="M21 21H14V19H19V14H21V21Z" fill="currentColor"/>
             </svg>
         </button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="functions/drawBackgound.js"></script>
+    <script src="functions.js"></script>
     <script src="klasy/obstacle.js"></script>
     <script src="klasy/player.js"></script>
     <script src="script.js"></script>

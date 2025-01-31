@@ -10,6 +10,13 @@ let score = 1;
 let highScore = localStorage.getItem("highScore") | 0;
 let frame = 0;
 
+function isFullscreen() {
+    return document.fullscreenElement !== null || 
+           document.webkitFullscreenElement !== null ||
+           document.mozFullScreenElement !== null ||
+           document.msFullscreenElement !== null;
+}
+
 function animate()
 {
     
@@ -110,10 +117,7 @@ addEventListener("keydown", (e) => {
 
 canvas.addEventListener("click", (e) => {
     if (!player.isGameOver) return;
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    if (mouseX <= ((canvas.width - 260) / 2 + 250) && mouseX >= (canvas.width - 260) / 2 &&
-        mouseY <= canvas.height - 150 + 100 && mouseY >= canvas.height - 150)
+    if (checkClick(e))
     {
         player.randomImage = Math.floor(Math.random() * 4) + 1;
         player.image.src = `img/player${player.randomImage}.png`
@@ -134,10 +138,7 @@ canvas.addEventListener("click", (e) => {
 
 canvas.addEventListener("mousemove", (e) => {
     if (!player.isGameOver) return;
-    const mouseX = e.offsetX;
-    const mouseY = e.offsetY;
-    if (mouseX <= ((canvas.width - 260) / 2 + 250) && mouseX >= (canvas.width - 260) / 2 &&
-        mouseY <= canvas.height - 150 + 100 && mouseY >= canvas.height - 150)
+    if (checkClick(e))
     {
         canvas.style.cursor = "pointer"
     }
@@ -147,3 +148,4 @@ canvas.addEventListener("mousemove", (e) => {
 document.getElementById("fullscreen").addEventListener("click", () => {
     canvas.requestFullscreen();
 })
+
