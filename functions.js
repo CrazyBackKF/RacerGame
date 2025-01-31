@@ -52,3 +52,10 @@ function checkClick(e)
     mouseY <= canvas.height - 150 + 100 && mouseY >= canvas.height - 150) || (mouseXRelative <= ((canvas.width - 260) / 2 + 250) && mouseXRelative >= (canvas.width - 260) / 2 &&
     mouseYRelative <= canvas.height - 150 + 100 && mouseYRelative >= canvas.height - 150))
 }
+
+function isFullscreen() {
+    return (document.fullscreenElement !== null || 
+           document.webkitFullscreenElement !== null ||
+           document.mozFullScreenElement !== null ||
+           document.msFullscreenElement !== null);
+}

@@ -10,13 +10,6 @@ let score = 1;
 let highScore = localStorage.getItem("highScore") | 0;
 let frame = 0;
 
-function isFullscreen() {
-    return document.fullscreenElement !== null || 
-           document.webkitFullscreenElement !== null ||
-           document.mozFullScreenElement !== null ||
-           document.msFullscreenElement !== null;
-}
-
 function animate()
 {
     
@@ -119,6 +112,11 @@ canvas.addEventListener("click", (e) => {
     if (!player.isGameOver) 
     {
         let mouseY = e.offsetY;
+        if(isFullscreen())
+        {
+            const scaleY = canvas.height / window.innerHeight;
+            mouseY = (e.clientY - window.scrollY) * scaleY;
+        }
         if(mouseY < player.position.y + player.height / 2) player.key.w = true;
         else if(mouseY > player.position.y + player.height / 2) player.key.s = true;
         return;
