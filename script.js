@@ -116,7 +116,13 @@ addEventListener("keydown", (e) => {
 })
 
 canvas.addEventListener("click", (e) => {
-    if (!player.isGameOver) return;
+    if (!player.isGameOver) 
+    {
+        let mouseY = e.offsetY;
+        if(mouseY < player.position.y + player.height / 2) player.key.w = true;
+        else if(mouseY > player.position.y + player.height / 2) player.key.s = true;
+        return;
+    }
     if (checkClick(e))
     {
         player.randomImage = Math.floor(Math.random() * 4) + 1;
