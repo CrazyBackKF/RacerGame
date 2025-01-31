@@ -66,7 +66,6 @@ function animate()
                 scale.y = carType.sedan.scaleY;
             }
             const imageSrc = `img/${randomImage}.png`
-            console.log(imageSrc)
             obstacles.push(new Obstacle(line, scale, imageSrc))
             lastDate = Date.now();
         }
@@ -143,4 +142,8 @@ canvas.addEventListener("mousemove", (e) => {
         canvas.style.cursor = "pointer"
     }
     else canvas.style.cursor = "default"
+})
+
+document.getElementById("fullscreen").addEventListener("click", () => {
+    canvas.requestFullscreen();
 })
