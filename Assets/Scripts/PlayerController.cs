@@ -92,18 +92,18 @@ public class PlayerController : MonoBehaviour
         {
             foreach (WheelCollider wheel in  wheelColliders)
             {
-                WheelFrictionCurve curve = wheel.forwardFriction;
+                WheelFrictionCurve curve = wheel.sidewaysFriction;
                 curve.stiffness = driftStiffness;
-                wheel.forwardFriction = curve;
+                wheel.sidewaysFriction = curve;
             }
         }
         else
         {
             foreach (WheelCollider wheel in wheelColliders)
             {
-                WheelFrictionCurve curve = wheel.forwardFriction;
+                WheelFrictionCurve curve = wheel.sidewaysFriction;
                 curve.stiffness = normalStiffness;
-                wheel.forwardFriction = curve;
+                wheel.sidewaysFriction = curve;
             }
         }
 
