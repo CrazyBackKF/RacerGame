@@ -3,10 +3,15 @@ using UnityEngine;
 
 public class CarAnimations : MonoBehaviour
 {
+    [Header("Variables")]
+    [SerializeField] private float steeringWheelMaxAngle = 70;
+    [SerializeField] private float steeringWheelRotationSpeed = 2;
+
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private List<Transform> wheelTransforms;
     [SerializeField] private List<WheelCollider> wheelColliders;
+    [SerializeField] private Transform steeringWheelTransform;
 
     private void Update()
     {
@@ -17,5 +22,8 @@ public class CarAnimations : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(speed / wheelColliders[i].radius, 0, 0);
             wheelTransforms[i].localRotation *= rotation;
         }
+
+        Quaternion steeringWheelRotation = Quaternion.Euler(0, steeringWheelMaxAngle * Inputs.Instance.turn().action.ReadValue<float>(), 0);
+        steeringWheelTransform.localRotation = Quaternion.Slerp(steeringWheelTransform.localRotation, steeringWheelRotation, steeringWheelRotationSpeed * Time.deltaTime);
     }
 }
