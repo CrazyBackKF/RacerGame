@@ -6,15 +6,21 @@ public class PlayerController : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private float motorTorque = 400f;
     [SerializeField] private float brakeTorque = 1500f;
+    [SerializeField] private float maxSpeed;
+    [Header("Turning stats")]
     [SerializeField] private float turnAngle = 60f;
     [SerializeField] private float turnSpeed = 5f;
+    [Header("Drift stats")]
     [SerializeField] private float normalStiffness = 1f;
     [SerializeField] private float driftStiffness = 0.5f;
+    [SerializeField] private float driftMultiplier = 1.5f;
+    [SerializeField] private float driftBrakeTorque = 500f;
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private List<WheelCollider> wheelColliders;
     [SerializeField] private List<WheelCollider> frontWheelColliders;
+    [SerializeField] private List<WheelCollider> rearWheelColliders;
     [SerializeField] private List<Transform> frontWheelTransforms;
 
     private void Start()
@@ -28,18 +34,18 @@ public class PlayerController : MonoBehaviour
         // jazda
         if (!Inputs.Instance.isAccelerating() && !Inputs.Instance.isDeaccelerating())
         {
-            addMotorTorque(0f);
+            setMotorTorque(0f, wheelColliders);
         }
 
         else if (Inputs.Instance.isAccelerating() && Inputs.Instance.isDeaccelerating())
         {
             if (Mathf.Abs(localRigidbody.z) > 0.1f)
             {
-                addBrakeTorque(brakeTorque);
+                setBrakeTorque(brakeTorque, wheelColliders);
             }
             else
             {
-                addBrakeTorque(0f);
+                setBrakeTorque(0f, wheelColliders);
             }
         }
 
@@ -47,11 +53,11 @@ public class PlayerController : MonoBehaviour
         {
             if (localRigidbody.z < -0.1f)
             {
-                addBrakeTorque(brakeTorque);
+                setBrakeTorque(brakeTorque, wheelColliders);
             }
             else
             {
-                addMotorTorque(motorTorque);
+                setMotorTorque(motorTorque, wheelColliders);
             }
         }
 
@@ -59,11 +65,11 @@ public class PlayerController : MonoBehaviour
         {
             if (localRigidbody.z > 0.1f)
             {
-                addBrakeTorque(brakeTorque);
+                setBrakeTorque(brakeTorque, wheelColliders);
             }
             else
             {
-                addMotorTorque(-motorTorque);
+                setMotorTorque(-motorTorque, wheelColliders);
             }
         }
 
@@ -75,7 +81,8 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < frontWheelColliders.Count; i++)
             {
                 frontWheelTransforms[i].localRotation = Quaternion.Slerp(frontWheelTransforms[i].localRotation, Quaternion.Euler(0, 0, rotation), turnSpeed * Time.deltaTime);
-                frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, rotation, turnSpeed * Time.deltaTime);
+                if (Inputs.Instance.isDrifting()) frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, rotation * driftMultiplier, turnSpeed * Time.deltaTime);
+                else frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, rotation, turnSpeed * Time.deltaTime);
             }
         }
         else
@@ -90,26 +97,28 @@ public class PlayerController : MonoBehaviour
         //drift
         if (Inputs.Instance.isDrifting())
         {
-            foreach (WheelCollider wheel in  wheelColliders)
+            foreach (WheelCollider wheel in wheelColliders)
             {
-                WheelFrictionCurve curve = wheel.sidewaysFriction;
-                curve.stiffness = driftStiffness;
-                wheel.sidewaysFriction = curve;
+                wheel.sidewaysFriction = setWheelFriction(wheel.sidewaysFriction, 0.1f, 0.25f, 0.1f, 0.25f, driftStiffness);
             }
+
+            setBrakeTorque(driftBrakeTorque, rearWheelColliders);
         }
         else
         {
             foreach (WheelCollider wheel in wheelColliders)
             {
-                WheelFrictionCurve curve = wheel.sidewaysFriction;
-                curve.stiffness = normalStiffness;
-                wheel.sidewaysFriction = curve;
+                wheel.sidewaysFriction = setWheelFriction(wheel.sidewaysFriction, 0.2f, 1f, 0.5f, 0.75f, normalStiffness);
             }
         }
 
+        if (rb.linearVelocity.magnitude > maxSpeed)
+        {
+            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
     }
 
-    private void addMotorTorque(float torque)
+    private void setMotorTorque(float torque, List<WheelCollider> wheelColliders)
     {
         foreach (WheelCollider wheelCollider in wheelColliders)
         {
@@ -118,12 +127,22 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void addBrakeTorque(float torque)
+    private void setBrakeTorque(float torque, List<WheelCollider> wheelColliders)
     {
         foreach (WheelCollider wheelCollider in wheelColliders)
         {
             wheelCollider.motorTorque = 0;
             wheelCollider.brakeTorque = torque;
         }
+    }
+
+    private WheelFrictionCurve setWheelFriction(WheelFrictionCurve curve, float extremumSlip, float extremumValue, float asymptoteSlip, float asymptoteValue, float stiffness)
+    {
+        curve.extremumSlip = extremumSlip;
+        curve.extremumValue = extremumValue;
+        curve.asymptoteSlip = asymptoteSlip;
+        curve.asymptoteValue = asymptoteValue;
+        curve.stiffness = stiffness;
+        return curve;
     }
 }
