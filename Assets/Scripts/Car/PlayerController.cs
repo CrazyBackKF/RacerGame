@@ -76,7 +76,7 @@ public class PlayerController : MonoBehaviour
         //skrêcanie
         if (Inputs.Instance.isTurning())
         {
-            float rotation = turnAngle * Mathf.Sign(Inputs.Instance.turn().action.ReadValue<float>());
+            float rotation = turnAngle * Mathf.Sign(Inputs.Instance.turn().ReadValue<float>());
 
             for (int i = 0; i < frontWheelColliders.Count; i++)
             {

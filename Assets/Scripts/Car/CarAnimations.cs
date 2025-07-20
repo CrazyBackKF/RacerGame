@@ -23,7 +23,7 @@ public class CarAnimations : MonoBehaviour
             wheelTransforms[i].localRotation *= rotation;
         }
 
-        Quaternion steeringWheelRotation = Quaternion.Euler(0, steeringWheelMaxAngle * Inputs.Instance.turn().action.ReadValue<float>(), 0);
+        Quaternion steeringWheelRotation = Quaternion.Euler(0, steeringWheelMaxAngle * Inputs.Instance.turn().ReadValue<float>(), 0);
         steeringWheelTransform.localRotation = Quaternion.Slerp(steeringWheelTransform.localRotation, steeringWheelRotation, steeringWheelRotationSpeed * Time.deltaTime);
     }
 }

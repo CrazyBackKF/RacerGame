@@ -130,6 +130,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "RaceStartCountdown",
+            "id": "3e3551c5-c7d8-426d-a9b8-7456070fc2d1",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "9c7512a9-95b4-4ab8-ac53-9f4438658ee2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a71f6305-974e-4b2e-b560-1967933ecaf7",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []
