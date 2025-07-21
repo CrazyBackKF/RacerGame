@@ -1,16 +1,54 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
 public class TimerTextManager : MonoBehaviour
 {
+    public static TimerTextManager Instance {  get; private set; }
+
     [SerializeField] private TextMeshProUGUI timerText;
 
-    private void Update()
+    private float time;
+
+    private void Awake()
     {
-        timerText.text = timeToText((int)(Time.time - GameManager.Instance.startRaceTime));
+        Instance = this;
     }
 
-    public string timeToText(int time)
+    private void Start()
+    {
+        resetTimer();
+    }
+
+    public void startTimer()
+    {
+        stopTimer();
+        resetTimer();
+        StartCoroutine(timerCoroutine());
+    }
+
+    public void stopTimer()
+    {
+        time = 0;
+        StopAllCoroutines();
+    }
+
+    private IEnumerator timerCoroutine()
+    {
+        while (true)
+        {
+            timerText.text = timeToText((int)time);
+            time += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private void resetTimer()
+    {
+        timerText.text = "00.00";
+    }
+
+    private string timeToText(int time)
     {
         int minutes = time / 60;
         int seconds = time % 60;

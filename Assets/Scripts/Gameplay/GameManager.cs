@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int startTimer;
     private float countdownTime;
-    public float startRaceTime { get; private set; }
 
     public enum State
     {
@@ -14,7 +13,8 @@ public class GameManager : MonoBehaviour
         Race
     }
 
-    private State currentState;
+    public State currentState { get; private set; }
+
 
     private void Awake()
     {
@@ -37,8 +37,8 @@ public class GameManager : MonoBehaviour
                 {
                     Inputs.Instance.changeCurrentInputMap("MainGameplay");
                     currentState = State.Race;
-                    startRaceTime = Time.time;
                     CheckpointManager.Instance.startGame();
+                    TimerTextManager.Instance.startTimer();
                 }
                 break;
         }

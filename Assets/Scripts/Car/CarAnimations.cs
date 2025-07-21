@@ -6,6 +6,7 @@ public class CarAnimations : MonoBehaviour
     [Header("Variables")]
     [SerializeField] private float steeringWheelMaxAngle = 70;
     [SerializeField] private float steeringWheelRotationSpeed = 2;
+    [SerializeField] private float turnSpeed = 5;
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
@@ -25,5 +26,10 @@ public class CarAnimations : MonoBehaviour
 
         Quaternion steeringWheelRotation = Quaternion.Euler(0, steeringWheelMaxAngle * Inputs.Instance.turn().ReadValue<float>(), 0);
         steeringWheelTransform.localRotation = Quaternion.Slerp(steeringWheelTransform.localRotation, steeringWheelRotation, steeringWheelRotationSpeed * Time.deltaTime);
+
+        foreach (WheelCollider collider in wheelColliders)
+        {
+            collider.transform.localRotation = Quaternion.Slerp(collider.transform.localRotation, Quaternion.Euler(0, 0, collider.steerAngle), turnSpeed * Time.deltaTime);
+        }
     }
 }

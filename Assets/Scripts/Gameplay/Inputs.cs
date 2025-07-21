@@ -7,9 +7,16 @@ public class Inputs : MonoBehaviour
 
     [SerializeField] private PlayerInput playerInput;
 
+    private InputActionMap mainGameplay;
+
     private void Awake()
     {
         Instance = this;
+    }
+
+    private void Start()
+    {
+        mainGameplay = playerInput.actions.FindActionMap("MainGameplay", true);
     }
 
     public void changeCurrentInputMap(string mapName)
@@ -17,21 +24,20 @@ public class Inputs : MonoBehaviour
         playerInput.SwitchCurrentActionMap(mapName);
     }
 
-    public InputAction accelerate() => playerInput.currentActionMap.FindAction("Accelerate");
-    public InputAction deaccelerate() => playerInput.currentActionMap.FindAction("Deaccelerate");
-    public InputAction turn() => playerInput.currentActionMap.FindAction("Turn");
-    public InputAction drift() => playerInput.currentActionMap.FindAction("Drift");
+    public InputAction accelerate() => mainGameplay.FindAction("Accelerate");
+    public InputAction deaccelerate() => mainGameplay.FindAction("Deaccelerate");
+    public InputAction turn() => mainGameplay.FindAction("Turn");
+    public InputAction drift() => mainGameplay.FindAction("Drift");
 
-    public bool isAccelerating() => isPressed("Accelerate");
-    public bool isDeaccelerating() => isPressed("Deaccelerate");
-    public bool isTurning() => isPressed("Turn");
-    public bool isDrifting() => isPressed("Drift");
+    public bool isAccelerating() => isPressed("Accelerate", mainGameplay);
+    public bool isDeaccelerating() => isPressed("Deaccelerate", mainGameplay);
+    public bool isTurning() => isPressed("Turn", mainGameplay);
+    public bool isDrifting() => isPressed("Drift", mainGameplay);
 
 
-    private bool isPressed(string name)
+    private bool isPressed(string name, InputActionMap map)
     {
-        var action = playerInput.currentActionMap.FindAction(name);
-        return action != null && Mathf.Abs(action.ReadValue<float>()) > 0.5f;
+        return (playerInput.currentActionMap == map && Mathf.Abs(map.FindAction(name).ReadValue<float>()) > 0.5f);
     }
 
 }

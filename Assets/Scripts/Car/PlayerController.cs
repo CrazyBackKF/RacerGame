@@ -23,9 +23,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<WheelCollider> rearWheelColliders;
     [SerializeField] private List<Transform> frontWheelTransforms;
 
+    private float distanceBetweenFrontWheels;
+    private float wheelbase;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
+        wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
     }
 
     private void Update()
@@ -76,20 +81,39 @@ public class PlayerController : MonoBehaviour
         //skrêcanie
         if (Inputs.Instance.isTurning())
         {
-            float rotation = turnAngle * Mathf.Sign(Inputs.Instance.turn().ReadValue<float>());
-
-            for (int i = 0; i < frontWheelColliders.Count; i++)
+            if (Inputs.Instance.isTurning())
             {
-                frontWheelTransforms[i].localRotation = Quaternion.Slerp(frontWheelTransforms[i].localRotation, Quaternion.Euler(0, 0, rotation), turnSpeed * Time.deltaTime);
-                if (Inputs.Instance.isDrifting()) frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, rotation * driftMultiplier, turnSpeed * Time.deltaTime);
-                else frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, rotation, turnSpeed * Time.deltaTime);
+                float input = Inputs.Instance.turn().ReadValue<float>();
+                float baseAngle = turnAngle * Mathf.Sign(input);
+
+                if (Inputs.Instance.isDrifting())
+                {
+                    baseAngle *= driftMultiplier;
+                }
+
+                float turnRadius = wheelbase / Mathf.Tan(Mathf.Abs(baseAngle) * Mathf.Deg2Rad);
+                float trackHalf = distanceBetweenFrontWheels / 2f;
+
+                float innerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelbase / (turnRadius - trackHalf)) * Mathf.Sign(input);
+                float outerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelbase / (turnRadius + trackHalf)) * Mathf.Sign(input);
+
+                if (Mathf.Sign(input) > 0) // skrêt w prawo
+                {
+                    frontWheelColliders[0].steerAngle = Mathf.Lerp(frontWheelColliders[0].steerAngle, innerAngle, turnSpeed * Time.deltaTime); // lewe
+                    frontWheelColliders[1].steerAngle = Mathf.Lerp(frontWheelColliders[1].steerAngle, outerAngle, turnSpeed * Time.deltaTime); // prawe
+                }
+                else // skrêt w lewo
+                {
+                    frontWheelColliders[1].steerAngle = Mathf.Lerp(frontWheelColliders[1].steerAngle, innerAngle, turnSpeed * Time.deltaTime); // prawe
+                    frontWheelColliders[0].steerAngle = Mathf.Lerp(frontWheelColliders[0].steerAngle, outerAngle, turnSpeed * Time.deltaTime); // lewe
+                }
             }
+
         }
         else
         {
             for (int i = 0; i < frontWheelColliders.Count; i++)
             {
-                frontWheelTransforms[i].localRotation = Quaternion.Slerp(frontWheelTransforms[i].localRotation, Quaternion.identity, turnSpeed * Time.deltaTime);
                 frontWheelColliders[i].steerAngle = Mathf.Lerp(frontWheelColliders[i].steerAngle, 0, turnSpeed * Time.deltaTime);
             }
         }
