@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float motorTorque = 400f;
     [SerializeField] private float brakeTorque = 1500f;
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float distanceToChangeWaypoint;
     [Header("Turning stats")]
     [SerializeField] private float turnAngle = 60f;
     [SerializeField] private float turnSpeed = 5f;
@@ -23,6 +25,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<WheelCollider> rearWheelColliders;
     [SerializeField] private List<Transform> frontWheelTransforms;
 
+    [SerializeField] private GameObject currentRaceTrack;
+
+    private List<Transform> waypoints;
+    private int currentWaypoint; 
+    private bool isCarReseting = false;
+    private Coroutine resetCoroutine;
+
     private float distanceBetweenFrontWheels;
     private float wheelbase;
 
@@ -31,10 +40,29 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
         wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
+        setNewWaypoints();
+    }
+
+    private void setNewWaypoints()
+    {
+        currentWaypoint = 0;
+        waypoints = new List<Transform>();
+        Transform waypointsTransform = currentRaceTrack.transform.Find("Waypoints");
+
+        foreach (Transform t in waypointsTransform)
+        {
+            waypoints.Add(t);
+        }
     }
 
     private void Update()
     {
+        if (Vector3.Distance(transform.position, waypoints[currentWaypoint].position) < distanceToChangeWaypoint)
+        {
+            if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
+            else currentWaypoint = 0;
+        }
+
         Vector3 localRigidbody = transform.InverseTransformDirection(rb.linearVelocity); 
         // jazda
         if (!Inputs.Instance.isAccelerating() && !Inputs.Instance.isDeaccelerating())
@@ -97,7 +125,7 @@ public class PlayerController : MonoBehaviour
                 float innerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelbase / (turnRadius - trackHalf)) * Mathf.Sign(input);
                 float outerAngle = Mathf.Rad2Deg * Mathf.Atan(wheelbase / (turnRadius + trackHalf)) * Mathf.Sign(input);
 
-                if (Mathf.Sign(input) > 0) // skrêt w prawo
+                if (input > 0) // skrêt w prawo
                 {
                     frontWheelColliders[0].steerAngle = Mathf.Lerp(frontWheelColliders[0].steerAngle, innerAngle, turnSpeed * Time.deltaTime); // lewe
                     frontWheelColliders[1].steerAngle = Mathf.Lerp(frontWheelColliders[1].steerAngle, outerAngle, turnSpeed * Time.deltaTime); // prawe
@@ -140,6 +168,20 @@ public class PlayerController : MonoBehaviour
         {
             rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
         }
+
+        if (Vector3.Dot(transform.up, Vector3.down) > 0.5f)
+        {
+            if (!isCarReseting)
+            {
+                isCarReseting = true;
+                resetCoroutine = StartCoroutine(resetCar());
+            }
+        }
+        else if (isCarReseting)
+        {
+            isCarReseting = false;
+            StopCoroutine(resetCoroutine);
+        }
     }
 
     private void setMotorTorque(float torque, List<WheelCollider> wheelColliders)
@@ -168,5 +210,15 @@ public class PlayerController : MonoBehaviour
         curve.asymptoteValue = asymptoteValue;
         curve.stiffness = stiffness;
         return curve;
+    }
+
+    private IEnumerator resetCar()
+    {
+        yield return new WaitForSeconds(3);
+        setMotorTorque(0f, wheelColliders);
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        transform.position = waypoints[Mathf.Clamp(currentWaypoint - 1, 0, waypoints.Count - 1)].position;
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
+        isCarReseting = false;
     }
 }
