@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using System.Runtime.CompilerServices;
 using UnityEngine.Windows;
+using UnityEngine.UIElements;
 
 public class AIController : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class AIController : MonoBehaviour
     [SerializeField] private float turnSpeed;
     [SerializeField] private float distanceToChangeWaypoint;
     [SerializeField] private float randomOffset;
+    [SerializeField] private float checkForOtherCarsRadius;
+    [SerializeField] private float avoidOtherCarsAngle;
+    [SerializeField] private float maxBoxcastDistance;
 
     [Header("Max speeds")]
     [SerializeField] private float normalMaxSpeed;
@@ -21,11 +25,15 @@ public class AIController : MonoBehaviour
     [SerializeField] private float speedChangeSpeed;
     private float currentMaxSpeed;
 
+    [Header("Layer masks")]
+    [SerializeField] private LayerMask carLayerMask;
+
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private List<WheelCollider> wheelColliders;
     [SerializeField] private List<WheelCollider> frontWheelColliders;
     [SerializeField] private List<WheelCollider> rearWheelColliders;
+    [SerializeField] private BoxCollider mainCollider;
 
     [SerializeField] private GameObject currentRaceTrack;
 
@@ -68,15 +76,18 @@ public class AIController : MonoBehaviour
 
     private IEnumerator race()
     {
-        currentTarget = new Vector3(waypoints[currentWaypoint].position.x + Random.Range(-randomOffset, randomOffset), waypoints[currentWaypoint].position.y, waypoints[currentWaypoint].position.z + Random.Range(-randomOffset, randomOffset));
+        currentTarget = Vector3.Lerp(waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint(), waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint(), Random.Range(0.25f, 0.75f));
 
         while (true)
         {
-            if (Vector3.Distance(transform.position, waypoints[currentWaypoint].position) < distanceToChangeWaypoint)
+            if (Vector3.Distance(transform.position, currentTarget) < distanceToChangeWaypoint)
             {
                 if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
                 else currentWaypoint = 0;
-                currentTarget = new Vector3(waypoints[currentWaypoint].position.x + Random.Range(-randomOffset, randomOffset), waypoints[currentWaypoint].position.y, waypoints[currentWaypoint].position.z + Random.Range(-randomOffset, randomOffset));
+                Vector3 pointMin = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint();
+                Vector3 pointMax = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint();
+                currentTarget = Vector3.Lerp(pointMin, pointMax, Random.Range(0.25f, 0.75f));
+                Debug.Log(currentTarget);
             }
 
             calculateAngle(out float angle);
@@ -84,6 +95,31 @@ public class AIController : MonoBehaviour
             changeStatsBasedOnAngle(angle);
 
             float oldAngle = angle;
+
+            Collider[] hits = Physics.OverlapSphere(transform.position, checkForOtherCarsRadius, carLayerMask);
+
+            if (hits.Length > 1)
+            {
+                float sum = 0;
+                int count = 0;
+
+                foreach (Collider hit in hits)
+                {
+                    if (hit.gameObject == gameObject) continue;
+
+                    Vector3 localPos = transform.InverseTransformPoint(hit.transform.position);
+                    float weight = 1f / Mathf.Max(localPos.magnitude, 0.01f);
+
+                    sum += localPos.x * weight;
+                    count++;
+                }
+
+                if (count > 0)
+                {
+                    angle = -(sum / count) * avoidOtherCarsAngle;
+                }
+            }
+
 
             if (Mathf.Abs(angle) > maxTurnAngle && Mathf.Abs(angle) < 90)
             {
@@ -111,12 +147,12 @@ public class AIController : MonoBehaviour
             }
             ackermanGeometry(angle);
 
-            if (Vector3.Dot(transform.up, Vector3.down) > 0.5f)
+            if (Vector3.Dot(transform.up, Vector3.down) > 0.5f || rb.linearVelocity.magnitude < 0.2f)
             {
                 if (!isCarReseting)
                 {
                     isCarReseting = true;
-                    resetCoroutine = StartCoroutine(resetCar());
+                    resetCoroutine = StartCoroutine(resetCarIEnumerator());
                 }
             }
             else if (isCarReseting)
@@ -124,7 +160,6 @@ public class AIController : MonoBehaviour
                 isCarReseting = false;
                 StopCoroutine(resetCoroutine);
             }
-
             yield return null;
         }
     }
@@ -176,8 +211,11 @@ public class AIController : MonoBehaviour
         {
             angle = oldAngle;
         }
-
-        if (Mathf.Abs(angle) > 40 && !isReversing)
+        if (Physics.BoxCast(mainCollider.center, Vector3.Scale(mainCollider.size * 0.5f, transform.lossyScale), transform.forward, out RaycastHit hit ,Quaternion.identity, maxBoxcastDistance, carLayerMask))
+        {
+            currentMaxSpeed = hit.rigidbody.linearVelocity.magnitude;
+        }
+        else if (Mathf.Abs(angle) > 40 && !isReversing)
         {
             currentMaxSpeed = sharpTurnMaxSpeed;
         }
@@ -221,9 +259,14 @@ public class AIController : MonoBehaviour
         return curve;
     }
 
-    private IEnumerator resetCar()
+    private IEnumerator resetCarIEnumerator()
     {
         yield return new WaitForSeconds(3);
+        resetCar();
+    }
+
+    private void resetCar()
+    {
         setMotorTorque(0f);
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         transform.position = waypoints[Mathf.Clamp(currentWaypoint - 1, 0, waypoints.Count - 1)].position;
@@ -231,14 +274,38 @@ public class AIController : MonoBehaviour
         isCarReseting = false;
     }
 
-
     private void OnDrawGizmosSelected()
     {
         if (!Application.isPlaying) return;
 
         Gizmos.color = Color.yellow;
 
-        Gizmos.DrawWireSphere(waypoints[currentWaypoint].position, 1);
+        Gizmos.DrawWireSphere(currentTarget, 1);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, checkForOtherCarsRadius);
+
+        Vector3 halfExtents = Vector3.Scale(mainCollider.size * 0.5f, transform.lossyScale);
+        Vector3 startCenter = transform.position + transform.rotation * mainCollider.center;
+        Vector3 direction = transform.forward;
+
+        Gizmos.color = Color.green;
+        DrawWireBox(startCenter, halfExtents, transform.rotation);
+
+        Vector3 endCenter = startCenter + direction * maxBoxcastDistance;
+
+        Gizmos.color = Color.red;
+        DrawWireBox(endCenter, halfExtents, transform.rotation);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawLine(startCenter, endCenter);
+    }
+
+    void DrawWireBox(Vector3 center, Vector3 halfExtents, Quaternion rotation)
+    {
+        Matrix4x4 cubeTransform = Matrix4x4.TRS(center, rotation, halfExtents * 2);
+        Gizmos.matrix = cubeTransform;
+        Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
     }
 
 }

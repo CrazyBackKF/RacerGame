@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RacetrackWaypoints : MonoBehaviour
@@ -6,6 +7,16 @@ public class RacetrackWaypoints : MonoBehaviour
     [SerializeField] private Color trackColor;
     [SerializeField] private float radius;
     [SerializeField] private float upDistance;
+    [SerializeField] private LayerMask mapMask;
+
+    [ContextMenu("Calibrate Waypoints")]
+    private void calibrateWaypoints()
+    {
+        RenameWaypoints();
+        changeYCoordinate();
+        rotateToNextWaypoint();
+        addWaypointOffsets();
+    }
 
     [ContextMenu("Rename Waypoints")]
      private void RenameWaypoints()
@@ -25,6 +36,41 @@ public class RacetrackWaypoints : MonoBehaviour
             {
                 transform.GetChild(i).position = new Vector3(transform.GetChild(i).position.x, hit.point.y + upDistance, transform.GetChild(i).position.z);
             }
+        }
+    }
+
+    [ContextMenu("Rotate to next waypoint")]
+    private void rotateToNextWaypoint()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Vector3 rotation;
+            if (i == transform.childCount - 1)
+            {
+                rotation = (transform.GetChild(0).transform.position - transform.GetChild(i).transform.position).normalized;
+            }
+            else
+            {
+                rotation = (transform.GetChild(i + 1).transform.position - transform.GetChild(i).transform.position).normalized;
+            }
+            transform.GetChild(i).rotation = Quaternion.LookRotation(rotation);
+        }
+    }
+
+    [ContextMenu("Add WaypointOffsets")]
+    private void addWaypointOffsets()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+
+            Transform child = transform.GetChild(i);
+            
+            if (!child.TryGetComponent<MaxWaypointRandomOffset>(out MaxWaypointRandomOffset comp))
+            {
+                comp = child.AddComponent<MaxWaypointRandomOffset>();
+            }
+
+            comp.calculatePoints(mapMask, 100f);
         }
     }
 
