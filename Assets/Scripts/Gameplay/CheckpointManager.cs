@@ -80,7 +80,7 @@ public class CheckpointManager : MonoBehaviour
                 currentCheckpointIndex = 0;
                 if (currentLaps < maxLaps) shouldChangeLap = true;
             }
-            Debug.Log(currentCheckpointIndex);
+
             hideCheckpoints(currentCheckpointIndex);
         }
     }

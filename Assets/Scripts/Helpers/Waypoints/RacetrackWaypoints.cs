@@ -5,7 +5,6 @@ using UnityEngine;
 public class RacetrackWaypoints : MonoBehaviour
 {
     [SerializeField] private Color trackColor;
-    [SerializeField] private float radius;
     [SerializeField] private float upDistance;
     [SerializeField] private LayerMask mapMask;
 
@@ -62,7 +61,6 @@ public class RacetrackWaypoints : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-
             Transform child = transform.GetChild(i);
             
             if (!child.TryGetComponent<MaxWaypointRandomOffset>(out MaxWaypointRandomOffset comp))
@@ -73,6 +71,32 @@ public class RacetrackWaypoints : MonoBehaviour
             comp.calculatePoints(mapMask, 100f);
         }
     }
+
+    [ContextMenu("Double the waypoints")]
+    private void doubleTheWaypoints()
+    {
+        int originalCount = transform.childCount;
+        Transform[] waypoints = new Transform[originalCount];
+
+        for (int i = 0; i < originalCount; i++)
+        {
+            waypoints[i] = transform.GetChild(i);
+        }
+
+        for (int i = 0; i < originalCount; i++)
+        {
+            Vector3 firstWaypoint = waypoints[i].position;
+            Vector3 secondWaypoint = waypoints[(i + 1) % originalCount].position;
+
+            GameObject newObject = new GameObject("new");
+            newObject.transform.parent = transform;
+            newObject.transform.position = (firstWaypoint + secondWaypoint) / 2;
+
+            int index = waypoints[i].GetSiblingIndex();
+            newObject.transform.SetSiblingIndex(index + 1);
+        }
+    }
+
 
     private void OnDrawGizmos()
     {
@@ -88,8 +112,6 @@ public class RacetrackWaypoints : MonoBehaviour
             {
                 Gizmos.DrawLine(transform.GetChild(transform.childCount - 1).position, transform.GetChild(i).position);
             }
-
-            Gizmos.DrawSphere(transform.GetChild(i).position, radius);
         }
     }
 }

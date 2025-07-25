@@ -28,6 +28,8 @@ public class MaxWaypointRandomOffset : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.DrawSphere(transform.position, 0.5f);
+
         if (minPoint == Vector3.zero || maxPoint == Vector3.zero) return;
 
         Gizmos.color = Color.blue;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -6,6 +7,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int startTimer;
     private float countdownTime;
+    private List<GameObject> cars;
 
     public enum State
     {
@@ -39,8 +41,28 @@ public class GameManager : MonoBehaviour
                     currentState = State.Race;
                     CheckpointManager.Instance.startGame();
                     TimerTextManager.Instance.startTimer();
+                    findCars();
                 }
                 break;
+            case State.Race:
+                //cars.Sort((a, b) =>
+                //{
+                //    int aWaypoints = a.GetComponent<CheckpointManager>().getCurrentWaypoints();
+                //    int bWaypoints = b.GetComponent<CheckpointManager>().getCurrentWaypoints();
+
+                //    return bWaypoints.CompareTo(aWaypoints);
+                //});
+                break;
+        }
+    }
+
+    private void findCars()
+    {
+        cars = new List<GameObject>();
+        GameObject[] carsArr = GameObject.FindGameObjectsWithTag("car");
+        foreach (GameObject car in carsArr)
+        {
+            cars.Add(car);
         }
     }
 }
