@@ -45,13 +45,13 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case State.Race:
-                //cars.Sort((a, b) =>
-                //{
-                //    int aWaypoints = a.GetComponent<CheckpointManager>().getCurrentWaypoints();
-                //    int bWaypoints = b.GetComponent<CheckpointManager>().getCurrentWaypoints();
+                cars.Sort((a, b) =>
+                {
+                    int aWaypoints = a.GetComponent<WaypointManager>().getCurrentWaypoint();
+                    int bWaypoints = b.GetComponent<WaypointManager>().getCurrentWaypoint();
 
-                //    return bWaypoints.CompareTo(aWaypoints);
-                //});
+                    return bWaypoints.CompareTo(aWaypoints);
+                });
                 break;
         }
     }
@@ -64,5 +64,10 @@ public class GameManager : MonoBehaviour
         {
             cars.Add(car);
         }
+    }
+
+    public List<GameObject> getCarsList()
+    {
+        return cars;
     }
 }

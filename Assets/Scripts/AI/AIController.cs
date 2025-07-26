@@ -38,7 +38,8 @@ public class AIController : MonoBehaviour
     [SerializeField] private GameObject currentRaceTrack;
 
     private List<Transform> waypoints;
-    private int currentWaypoint = 0;
+    private int currentWaypoint;
+    private int currentLap;
 
     private float distanceBetweenFrontWheels;
     private float wheelbase;
@@ -50,7 +51,17 @@ public class AIController : MonoBehaviour
     Vector3 currentTarget;
     private void Start()
     {
+        GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
+
         startNewRace();
+    }
+
+    private void WaypointManager_onWaypointPassed(object sender, WaypointManager.OnWaypointPassedEventArgs e)
+    {
+        currentWaypoint = e.currentWaypoint;
+        currentLap = e.currentLap;
+        currentTarget = e.currentTargetForBots;
+
     }
 
     private void startNewRace()
@@ -75,21 +86,9 @@ public class AIController : MonoBehaviour
 
 
     private IEnumerator race()
-    {
-        currentTarget = Vector3.Lerp(waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint(), waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint(), Random.Range(0.25f, 0.75f));
-
+    { 
         while (true)
         {
-            if (Vector3.Distance(transform.position, currentTarget) < distanceToChangeWaypoint)
-            {
-                if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
-                else currentWaypoint = 0;
-                Vector3 pointMin = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint();
-                Vector3 pointMax = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint();
-                currentTarget = Vector3.Lerp(pointMin, pointMax, Random.Range(0.25f, 0.75f));
-                Debug.Log(currentTarget);
-            }
-
             calculateAngle(out float angle);
 
             changeStatsBasedOnAngle(angle);

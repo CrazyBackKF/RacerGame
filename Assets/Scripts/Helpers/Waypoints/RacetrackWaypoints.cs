@@ -7,6 +7,7 @@ public class RacetrackWaypoints : MonoBehaviour
     [SerializeField] private Color trackColor;
     [SerializeField] private float upDistance;
     [SerializeField] private LayerMask mapMask;
+    [SerializeField] private float minDistanceToDouble;
 
     [ContextMenu("Calibrate Waypoints")]
     private void calibrateWaypoints()
@@ -87,6 +88,8 @@ public class RacetrackWaypoints : MonoBehaviour
         {
             Vector3 firstWaypoint = waypoints[i].position;
             Vector3 secondWaypoint = waypoints[(i + 1) % originalCount].position;
+
+            if (Vector3.Distance(firstWaypoint, secondWaypoint) < minDistanceToDouble) continue; 
 
             GameObject newObject = new GameObject("new");
             newObject.transform.parent = transform;

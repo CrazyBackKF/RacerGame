@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 1368994944501951629}
   - component: {fileID: 2091816904852692000}
   - component: {fileID: 3700710466506518061}
+  - component: {fileID: 4045794084016835882}
   m_Layer: 6
   m_Name: bot
   m_TagString: car
@@ -357,7 +358,7 @@ MonoBehaviour:
   turnSpeed: 5
   distanceToChangeWaypoint: 10
   randomOffset: 10
-  checkForOtherCarsRadius: 0
+  checkForOtherCarsRadius: 7
   avoidOtherCarsAngle: 10
   maxBoxcastDistance: 20
   normalMaxSpeed: 40
@@ -381,6 +382,20 @@ MonoBehaviour:
   - {fileID: 4114160790644256373}
   mainCollider: {fileID: 7254153655042300108}
   currentRaceTrack: {fileID: 0}
+--- !u!114 &4045794084016835882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416024687555981859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2308e3cfdc98af448be68be4b0e83aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentRaceTrack: {fileID: 0}
+  minDistance: 0
 --- !u!1 &450198386641383726
 GameObject:
   m_ObjectHideFlags: 0

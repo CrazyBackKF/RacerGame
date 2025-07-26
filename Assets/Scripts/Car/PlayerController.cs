@@ -42,6 +42,13 @@ public class PlayerController : MonoBehaviour
         distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
         wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
         setNewWaypoints();
+
+        GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
+    }
+
+    private void WaypointManager_onWaypointPassed(object sender, WaypointManager.OnWaypointPassedEventArgs e)
+    {
+        currentWaypoint = e.currentWaypoint;
     }
 
     private void setNewWaypoints()
@@ -58,12 +65,6 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (Vector3.Distance(transform.position, waypoints[currentWaypoint].position) < distanceToChangeWaypoint)
-        {
-            if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
-            else currentWaypoint = 0;
-        }
-
         Vector3 localRigidbody = transform.InverseTransformDirection(rb.linearVelocity); 
         // jazda
         if (!Inputs.Instance.isAccelerating() && !Inputs.Instance.isDeaccelerating())
