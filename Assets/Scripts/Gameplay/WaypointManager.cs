@@ -89,6 +89,19 @@ public class WaypointManager : MonoBehaviour
 
     public int getCurrentWaypoint()
     {
-        return (currentWaypoint + currentLap * 1000);
+        int closestWaypoint = 0;
+        float minDistance = Vector3.Distance(transform.position, waypoints[0].transform.position);
+
+        for (int i = 0; i < waypoints.Count; i++)
+        {
+            float distance = Vector3.Distance(transform.position, waypoints[i].transform.position);
+            if (distance < minDistance)
+            {
+                closestWaypoint = i;
+                minDistance = distance;
+            }
+        }
+
+        return (closestWaypoint + currentLap * 1000);
     }
 }
