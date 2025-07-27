@@ -6,8 +6,11 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
 
     [SerializeField] private int startTimer;
+    [SerializeField] private GameObject playerCar;
     private float countdownTime;
     private List<GameObject> cars;
+
+    [SerializeField] private int maxLaps;
 
     public enum State
     {
@@ -47,6 +50,13 @@ public class GameManager : MonoBehaviour
             case State.Race:
                 cars.Sort((a, b) =>
                 {
+                    WaypointManager aManager = a.GetComponent<WaypointManager>();
+                    WaypointManager bManager = b.GetComponent<WaypointManager>();
+
+                    if (aManager.finished && bManager.finished) return 0;
+                    else if (aManager.finished) return -1;
+                    else if (bManager.finished) return 1;
+
                     int aWaypoints = a.GetComponent<WaypointManager>().getCurrentWaypoint();
                     int bWaypoints = b.GetComponent<WaypointManager>().getCurrentWaypoint();
 
@@ -69,5 +79,15 @@ public class GameManager : MonoBehaviour
     public List<GameObject> getCarsList()
     {
         return cars;
+    }
+
+    public int getMaxLaps()
+    {
+        return maxLaps;
+    }
+
+    public GameObject getPlayerCar()
+    {
+        return playerCar;
     }
 }

@@ -7,7 +7,7 @@ public class CheckpointManager : MonoBehaviour
     public static CheckpointManager Instance { get; private set; }
 
     [SerializeField] private Transform currentRacetrackCheckpointsTransform;
-    [SerializeField] private int maxLaps;
+    private int maxLaps;
 
     private List<GameObject> currentCheckpointList;
     private int currentCheckpointIndex = 0;
@@ -17,6 +17,7 @@ public class CheckpointManager : MonoBehaviour
 
     public event EventHandler<OnRaceStartedAndOnLapFinishedEventArgs> onRaceStarted;
     public event EventHandler<OnRaceStartedAndOnLapFinishedEventArgs> onLapFinished;
+    public event EventHandler onRaceFinished;
 
     public class OnRaceStartedAndOnLapFinishedEventArgs : EventArgs
     {
@@ -33,6 +34,7 @@ public class CheckpointManager : MonoBehaviour
     {
         getCheckpoints(currentRacetrackCheckpointsTransform);
         hideCheckpoints(currentCheckpointIndex);
+        maxLaps = GameManager.Instance.getMaxLaps();
         onRaceStarted?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = maxLaps });
         onLapFinished?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = currentLaps + 1 });
     }
@@ -70,7 +72,7 @@ public class CheckpointManager : MonoBehaviour
 
                 if (currentLaps == maxLaps)
                 {
-                    endRace();
+                    onRaceFinished?.Invoke(this, EventArgs.Empty);
                 }
             }
 
@@ -83,10 +85,5 @@ public class CheckpointManager : MonoBehaviour
 
             hideCheckpoints(currentCheckpointIndex);
         }
-    }
-
-    private void endRace()
-    {
-        Debug.Log("Wygrales, skrypt CheckpointManager");
     }
 }

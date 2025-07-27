@@ -10,6 +10,7 @@ public class AIController : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private float motorTorque;
     [SerializeField] private float brakeTorque;
+    [SerializeField] private float finishBrakeTorque;
     [SerializeField] private float maxTurnAngle;
     [SerializeField] private float turnSpeed;
     [SerializeField] private float distanceToChangeWaypoint;
@@ -47,13 +48,34 @@ public class AIController : MonoBehaviour
     private bool isReversing = false;
     private bool isCarReseting = false; 
     private Coroutine resetCoroutine;
+    private Coroutine raceCoroutine;
 
     Vector3 currentTarget;
     private void Start()
     {
+        GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>().onRaceFinished += OnPlayerRaceFinished;
         GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
+        GetComponent<WaypointManager>().onRaceFinished += OnRaceFinished;
 
         startNewRace();
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>().onRaceFinished -= OnPlayerRaceFinished;
+        GetComponent<WaypointManager>().onWaypointPassed -= WaypointManager_onWaypointPassed;
+        GetComponent<WaypointManager>().onRaceFinished -= OnRaceFinished;
+    }
+
+    private void OnRaceFinished(object sender, System.EventArgs e)
+    {
+        StartCoroutine(stopCarAfterFinishingRace(1));
+    }
+
+    private void OnPlayerRaceFinished(object sender, System.EventArgs e)
+    {
+        StopAllCoroutines();
+        gameObject.SetActive(false);
     }
 
     private void WaypointManager_onWaypointPassed(object sender, WaypointManager.OnWaypointPassedEventArgs e)
@@ -69,7 +91,7 @@ public class AIController : MonoBehaviour
         distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
         wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
         setNewWaypoints();
-        StartCoroutine(race());
+        raceCoroutine = StartCoroutine(race());
     }
     
     private void setNewWaypoints()
@@ -264,6 +286,15 @@ public class AIController : MonoBehaviour
         resetCar();
     }
 
+    private IEnumerator stopCarAfterFinishingRace(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        setBrakeTorque(finishBrakeTorque);
+        StopCoroutine(raceCoroutine);
+        yield return new WaitForSeconds(3f);
+        gameObject.SetActive(false);
+    }
+
     private void resetCar()
     {
         setMotorTorque(0f);
@@ -296,6 +327,9 @@ public class AIController : MonoBehaviour
         Gizmos.color = Color.red;
         DrawWireBox(endCenter, halfExtents, transform.rotation);
 
+
+        Matrix4x4 cubeTransform = Matrix4x4.zero;
+        Gizmos.matrix = cubeTransform;
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(startCenter, endCenter);
     }

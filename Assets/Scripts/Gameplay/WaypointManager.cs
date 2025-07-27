@@ -7,14 +7,18 @@ public class WaypointManager : MonoBehaviour
 {
     [SerializeField] private Transform currentRaceTrack;
     [SerializeField] private float minDistance;
+    [SerializeField] private bool isPlayer;
 
     private List<Transform> waypoints;
     private int currentWaypoint = 0;
     private int currentLap = 0;
+    private int maxLaps;
+    public bool finished {  get; private set; }
 
     private bool isFirstFrame = true;
 
     public event EventHandler<OnWaypointPassedEventArgs> onWaypointPassed;
+    public event EventHandler onRaceFinished;
 
     public class OnWaypointPassedEventArgs : EventArgs
     {
@@ -36,11 +40,13 @@ public class WaypointManager : MonoBehaviour
 
     private void startRace()
     {
+        finished = false;
         findWaypoints();
+        maxLaps = GameManager.Instance.getMaxLaps();
         onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs 
         { 
             currentWaypoint = currentWaypoint, 
-            currentTargetForBots = Vector3.Lerp(waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint(), waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint(), UnityEngine.Random.Range(0.25f, 0.75f)),
+            currentTargetForBots = waypoints[currentWaypoint].position,
             currentLap = currentLap
         });
     }
@@ -69,22 +75,29 @@ public class WaypointManager : MonoBehaviour
 
         Vector3 perpendicularVector = transform.position - Q;
 
-        if (perpendicularVector.magnitude < minDistance)
+        if ((perpendicularVector.magnitude < minDistance && currentWaypoint != waypoints.Count - 1) || perpendicularVector.magnitude < 1f)
         {
             if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
             else
             {
                 currentWaypoint = 0;
-                currentLap++;
+                if (currentLap < maxLaps - 1) currentLap++;
+                else raceEnd();
             }
 
             onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs
             {
                 currentWaypoint = currentWaypoint,
-                currentTargetForBots = Vector3.Lerp(waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint(), waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint(), UnityEngine.Random.Range(0.25f, 0.75f)),
+                currentTargetForBots = waypoints[currentWaypoint].position,
                 currentLap = currentLap
             });
         }
+    }
+
+    private void raceEnd()
+    {
+        finished = true;
+        onRaceFinished?.Invoke(this, EventArgs.Empty);
     }
 
     public int getCurrentWaypoint()
@@ -102,6 +115,6 @@ public class WaypointManager : MonoBehaviour
             }
         }
 
-        return (closestWaypoint + currentLap * 1000);
+        return (closestWaypoint + currentLap * waypoints.Count);
     }
 }

@@ -354,6 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   motorTorque: 1200
   brakeTorque: 0
+  finishBrakeTorque: 0
   maxTurnAngle: 30
   turnSpeed: 5
   distanceToChangeWaypoint: 10
@@ -396,6 +397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentRaceTrack: {fileID: 0}
   minDistance: 0
+  isPlayer: 0
 --- !u!1 &450198386641383726
 GameObject:
   m_ObjectHideFlags: 0
