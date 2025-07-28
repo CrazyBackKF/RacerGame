@@ -135,6 +135,15 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PauseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""b985b18a-2739-4557-a38a-ef9fa46bb66b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -214,6 +223,17 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
                     ""action"": ""Drift"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77400611-930c-4b67-84ae-17ac0640c685"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -255,6 +275,7 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
         m_MainGameplay_Turn = m_MainGameplay.FindAction("Turn", throwIfNotFound: true);
         m_MainGameplay_Camera = m_MainGameplay.FindAction("Camera", throwIfNotFound: true);
         m_MainGameplay_Drift = m_MainGameplay.FindAction("Drift", throwIfNotFound: true);
+        m_MainGameplay_PauseMenu = m_MainGameplay.FindAction("PauseMenu", throwIfNotFound: true);
         // RaceStartCountdown
         m_RaceStartCountdown = asset.FindActionMap("RaceStartCountdown", throwIfNotFound: true);
         m_RaceStartCountdown_Newaction = m_RaceStartCountdown.FindAction("New action", throwIfNotFound: true);
@@ -344,6 +365,7 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
     private readonly InputAction m_MainGameplay_Turn;
     private readonly InputAction m_MainGameplay_Camera;
     private readonly InputAction m_MainGameplay_Drift;
+    private readonly InputAction m_MainGameplay_PauseMenu;
     /// <summary>
     /// Provides access to input actions defined in input action map "MainGameplay".
     /// </summary>
@@ -375,6 +397,10 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "MainGameplay/Drift".
         /// </summary>
         public InputAction @Drift => m_Wrapper.m_MainGameplay_Drift;
+        /// <summary>
+        /// Provides access to the underlying input action "MainGameplay/PauseMenu".
+        /// </summary>
+        public InputAction @PauseMenu => m_Wrapper.m_MainGameplay_PauseMenu;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -416,6 +442,9 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
             @Drift.started += instance.OnDrift;
             @Drift.performed += instance.OnDrift;
             @Drift.canceled += instance.OnDrift;
+            @PauseMenu.started += instance.OnPauseMenu;
+            @PauseMenu.performed += instance.OnPauseMenu;
+            @PauseMenu.canceled += instance.OnPauseMenu;
         }
 
         /// <summary>
@@ -442,6 +471,9 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
             @Drift.started -= instance.OnDrift;
             @Drift.performed -= instance.OnDrift;
             @Drift.canceled -= instance.OnDrift;
+            @PauseMenu.started -= instance.OnPauseMenu;
+            @PauseMenu.performed -= instance.OnPauseMenu;
+            @PauseMenu.canceled -= instance.OnPauseMenu;
         }
 
         /// <summary>
@@ -613,6 +645,13 @@ public partial class @InputActionScript: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDrift(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PauseMenu" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPauseMenu(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RaceStartCountdown" which allows adding and removing callbacks.

@@ -1,0 +1,9 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/USS/PauseMenuUSS.uss?fileID=7433441132597879392&amp;guid=7d2a2141cbf2f2a428f4d4d97d9a709f&amp;type=3#PauseMenuUSS" />
+    <engine:VisualElement style="flex-grow: 1; width: 1924px; height: auto; flex-shrink: 0; position: relative; align-self: flex-start; translate: 0 0; left: 0; transform-origin: center; top: 0; justify-content: center; align-items: center; background-image: url(&quot;project://database/Assets/UI%20Toolkit/UIDocuments/PauseMenu/Images/Png/pauseMenuBackground.png?fileID=2800000&amp;guid=b83679a26e478db42b6bbb3e453961b6&amp;type=3#pauseMenuBackground&quot;);">
+        <engine:Label text="PAUSE" style="-unity-font-definition: url(&quot;project://database/Assets/Visuals/Packages/FPSFont/FPS%20Gaming%20Font/Square-Black.ttf?fileID=12800000&amp;guid=d7cffddcbc0cc8f4ebe6e28eb9804082&amp;type=3#Square-Black&quot;); font-size: 118px; -unity-text-outline-color: rgba(0, 0, 0, 0); color: rgb(255, 255, 255);" />
+        <engine:Button text="Resume" name="Resume" class="buttonResume" />
+        <engine:Button text="Options" name="Options" class="button buttonOptions" />
+        <engine:Button text="Quit" name="Quit" class="button buttonQuit" />
+    </engine:VisualElement>
+</engine:UXML>

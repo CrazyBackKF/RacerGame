@@ -12,10 +12,6 @@ public class Inputs : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
         mainGameplay = playerInput.actions.FindActionMap("MainGameplay", true);
     }
 
@@ -28,6 +24,7 @@ public class Inputs : MonoBehaviour
     public InputAction deaccelerate() => mainGameplay.FindAction("Deaccelerate");
     public InputAction turn() => mainGameplay.FindAction("Turn");
     public InputAction drift() => mainGameplay.FindAction("Drift");
+    public InputAction pause() => mainGameplay.FindAction("PauseMenu");
 
     public bool isAccelerating() => isPressed("Accelerate", mainGameplay);
     public bool isDeaccelerating() => isPressed("Deaccelerate", mainGameplay);

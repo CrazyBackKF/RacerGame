@@ -10,21 +10,33 @@ public class TimerTextManager : MonoBehaviour
 
     private float time;
 
-    private void Start()
+    private bool shouldTimerRun;
+
+    private void OnEnable()
     {
-        resetTimer();
         GameManager.Instance.onRaceStarted += startTimer;
+        if (shouldTimerRun)
+        {
+            StartCoroutine(timerCoroutine());
+        }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.onRaceStarted -= startTimer;
     }
 
     private void startTimer(object sender, System.EventArgs e)
     {
         stopTimer();
         resetTimer();
+        shouldTimerRun = true;
         StartCoroutine(timerCoroutine());
     }
 
     public void stopTimer()
     {
+        shouldTimerRun = false;
         time = 0;
         StopAllCoroutines();
     }
