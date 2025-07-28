@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,10 +8,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int startTimer;
     [SerializeField] private GameObject playerCar;
+    [SerializeField] private GameObject currentRaceTrack;
     private float countdownTime;
     private List<GameObject> cars;
 
     [SerializeField] private int maxLaps;
+
+    public event EventHandler onRaceStarted;
 
     public enum State
     {
@@ -42,16 +46,15 @@ public class GameManager : MonoBehaviour
                 {
                     Inputs.Instance.changeCurrentInputMap("MainGameplay");
                     currentState = State.Race;
-                    CheckpointManager.Instance.startGame();
-                    TimerTextManager.Instance.startTimer();
                     findCars();
+                    onRaceStarted?.Invoke(this, EventArgs.Empty);
                 }
                 break;
             case State.Race:
                 cars.Sort((a, b) =>
                 {
-                    WaypointManager aManager = a.GetComponent<WaypointManager>();
-                    WaypointManager bManager = b.GetComponent<WaypointManager>();
+                    CheckpointManager aManager = a.GetComponent<CheckpointManager>();
+                    CheckpointManager bManager = b.GetComponent<CheckpointManager>();
 
                     if (aManager.finished && bManager.finished) return 0;
                     else if (aManager.finished) return -1;
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour
     {
         cars = new List<GameObject>();
         GameObject[] carsArr = GameObject.FindGameObjectsWithTag("car");
+
         foreach (GameObject car in carsArr)
         {
             cars.Add(car);
@@ -89,5 +93,25 @@ public class GameManager : MonoBehaviour
     public GameObject getPlayerCar()
     {
         return playerCar;
+    }
+
+    public GameObject getCurrentRaceTrack()
+    {
+        return currentRaceTrack;
+    }
+
+    public Transform getCurrentCheckpoints()
+    {
+        return currentRaceTrack.transform.Find("Checkpoints");
+    }
+
+    public Transform getCurrentWaypoints()
+    {
+        return currentRaceTrack.transform.Find("Waypoints");
+    }
+
+    public Transform getCurrentFinishCameraPositions()
+    {
+        return currentRaceTrack.transform.Find("FinishCameraPositions");
     }
 }

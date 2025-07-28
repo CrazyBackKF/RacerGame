@@ -5,20 +5,18 @@ using UnityEngine.UIElements;
 
 public class WaypointManager : MonoBehaviour
 {
-    [SerializeField] private Transform currentRaceTrack;
     [SerializeField] private float minDistance;
     [SerializeField] private bool isPlayer;
 
+    [SerializeField] private CheckpointManager checkpointManager;
+
     private List<Transform> waypoints;
     private int currentWaypoint = 0;
-    private int currentLap = 0;
-    private int maxLaps;
-    public bool finished {  get; private set; }
+    private int maxLaps = 0;
 
-    private bool isFirstFrame = true;
+    private bool isRaceStarted = false;
 
     public event EventHandler<OnWaypointPassedEventArgs> onWaypointPassed;
-    public event EventHandler onRaceFinished;
 
     public class OnWaypointPassedEventArgs : EventArgs
     {
@@ -27,39 +25,37 @@ public class WaypointManager : MonoBehaviour
         public int currentLap;
     }
 
-    private void findWaypoints()
+    private void Start()
+    {
+        GameManager.Instance.onRaceStarted += startRace;
+    }
+
+    private void startRace(object sender, EventArgs e)
+    {
+        isRaceStarted = true;
+        findWaypoints(GameManager.Instance.getCurrentWaypoints());
+        maxLaps = GameManager.Instance.getMaxLaps();
+        onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs
+        {
+            currentWaypoint = currentWaypoint,
+            currentTargetForBots = waypoints[currentWaypoint].position,
+            currentLap = checkpointManager.getCurrentLap()
+        });
+    }
+
+    private void findWaypoints(Transform currentWaypointsTransform)
     {
         waypoints = new List<Transform>();
-        Transform waypointsList = currentRaceTrack.Find("Waypoints");
 
-        foreach (Transform t in waypointsList)
+        foreach (Transform t in currentWaypointsTransform)
         {
             waypoints.Add(t);
         }
     }
 
-    private void startRace()
-    {
-        finished = false;
-        findWaypoints();
-        maxLaps = GameManager.Instance.getMaxLaps();
-        onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs 
-        { 
-            currentWaypoint = currentWaypoint, 
-            currentTargetForBots = waypoints[currentWaypoint].position,
-            currentLap = currentLap
-        });
-    }
-
     private void Update()
     {
-        if (isFirstFrame)
-        {
-            isFirstFrame = false;
-            startRace();
-        }
-
-        if (currentWaypoint >= waypoints.Count) return;
+        if (!isRaceStarted || currentWaypoint >= waypoints.Count) return;
 
         Vector3 minPoint = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMinPoint();
         Vector3 maxPoint = waypoints[currentWaypoint].GetComponent<MaxWaypointRandomOffset>().getMaxPoint();
@@ -75,29 +71,23 @@ public class WaypointManager : MonoBehaviour
 
         Vector3 perpendicularVector = transform.position - Q;
 
-        if ((perpendicularVector.magnitude < minDistance && currentWaypoint != waypoints.Count - 1) || perpendicularVector.magnitude < 1f)
+        if (perpendicularVector.magnitude < minDistance)
         {
             if (currentWaypoint < waypoints.Count - 1) currentWaypoint++;
             else
             {
                 currentWaypoint = 0;
-                if (currentLap < maxLaps - 1) currentLap++;
-                else raceEnd();
             }
 
             onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs
             {
                 currentWaypoint = currentWaypoint,
                 currentTargetForBots = waypoints[currentWaypoint].position,
-                currentLap = currentLap
+                currentLap = checkpointManager.getCurrentLap()
             });
         }
-    }
 
-    private void raceEnd()
-    {
-        finished = true;
-        onRaceFinished?.Invoke(this, EventArgs.Empty);
+        if (checkpointManager.finished) isRaceStarted = false;
     }
 
     public int getCurrentWaypoint()
@@ -115,6 +105,6 @@ public class WaypointManager : MonoBehaviour
             }
         }
 
-        return (closestWaypoint + currentLap * waypoints.Count);
+        return (closestWaypoint + checkpointManager.getCurrentLap() * (waypoints.Count + 1));
     }
 }

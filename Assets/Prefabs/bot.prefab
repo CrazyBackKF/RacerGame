@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: 2091816904852692000}
   - component: {fileID: 3700710466506518061}
   - component: {fileID: 4045794084016835882}
+  - component: {fileID: 8127612446239921585}
   m_Layer: 6
   m_Name: bot
   m_TagString: car
@@ -238,14 +239,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 416024687555981859}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.385745, z: 0, w: 0.92260545}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 87.27644, y: 6.26, z: -116.208374}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4704457903164868619}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -45.38, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &7254153655042300108
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -265,8 +266,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.0106096, y: 1.467166, z: 6.360658}
-  m_Center: {x: 0, y: 0.89433956, z: 0.12961698}
+  m_Size: {x: 3.0106096, y: 1.172976, z: 6.360658}
+  m_Center: {x: 0, y: 0.7472446, z: 0.12961698}
 --- !u!54 &3965307837807925163
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -382,7 +383,6 @@ MonoBehaviour:
   - {fileID: 427719334083557370}
   - {fileID: 4114160790644256373}
   mainCollider: {fileID: 7254153655042300108}
-  currentRaceTrack: {fileID: 0}
 --- !u!114 &4045794084016835882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,8 +395,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2308e3cfdc98af448be68be4b0e83aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentRaceTrack: {fileID: 0}
   minDistance: 0
+  isPlayer: 0
+  checkpointManager: {fileID: 8127612446239921585}
+--- !u!114 &8127612446239921585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416024687555981859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e65c8bf3e49884caca3556dd32ceba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   isPlayer: 0
 --- !u!1 &450198386641383726
 GameObject:

@@ -26,12 +26,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private List<WheelCollider> rearWheelColliders;
     [SerializeField] private List<Transform> frontWheelTransforms;
 
-    [SerializeField] private GameObject currentRaceTrack;
 
     private List<Transform> waypoints;
     private int currentWaypoint; 
     private bool isCarReseting = false;
     private Coroutine resetCoroutine;
+
+    private bool isRaceStarted = false;
 
     private float distanceBetweenFrontWheels;
     private float wheelbase;
@@ -39,11 +40,17 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
-        wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
-        setNewWaypoints();
 
         GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
+        GameManager.Instance.onRaceStarted += startRace;
+    }
+
+    private void startRace(object sender, EventArgs e)
+    {
+        isRaceStarted = true;
+        distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
+        wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
+        setNewWaypoints(GameManager.Instance.getCurrentWaypoints());
     }
 
     private void WaypointManager_onWaypointPassed(object sender, WaypointManager.OnWaypointPassedEventArgs e)
@@ -51,13 +58,12 @@ public class PlayerController : MonoBehaviour
         currentWaypoint = e.currentWaypoint;
     }
 
-    private void setNewWaypoints()
+    private void setNewWaypoints(Transform currentWaypointsTransform)
     {
         currentWaypoint = 0;
         waypoints = new List<Transform>();
-        Transform waypointsTransform = currentRaceTrack.transform.Find("Waypoints");
 
-        foreach (Transform t in waypointsTransform)
+        foreach (Transform t in currentWaypointsTransform)
         {
             waypoints.Add(t);
         }
@@ -65,6 +71,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!isRaceStarted) return;
+
         Vector3 localRigidbody = transform.InverseTransformDirection(rb.linearVelocity); 
         // jazda
         if (!Inputs.Instance.isAccelerating() && !Inputs.Instance.isDeaccelerating())

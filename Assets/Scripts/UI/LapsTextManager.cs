@@ -16,9 +16,9 @@ public class LapsTextManager : MonoBehaviour
     private void Start()
     {
         Show();
-
-        CheckpointManager.Instance.onRaceStarted += (object sender, CheckpointManager.OnRaceStartedAndOnLapFinishedEventArgs e) => { allLaps.text = e.lap.ToString(); };
-        CheckpointManager.Instance.onLapFinished += (object sender, CheckpointManager.OnRaceStartedAndOnLapFinishedEventArgs e) => { currentLap.text = e.lap.ToString(); };
+        CheckpointManager playerManager = GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>();
+        playerManager.onRaceStarted += (object sender, CheckpointManager.OnRaceStartedAndOnLapFinishedEventArgs e) => { allLaps.text = e.lap.ToString(); };
+        playerManager.onLapFinished += (object sender, CheckpointManager.OnRaceStartedAndOnLapFinishedEventArgs e) => { currentLap.text = e.lap.ToString(); };
     }
 
     private void Show()

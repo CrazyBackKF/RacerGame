@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class ChangeCameraAfterFinish : MonoBehaviour
 {
-    [SerializeField] private GameObject currentRaceTrack;
     [SerializeField] private CinemachineCamera finishCamera;
     [SerializeField] private CinemachineCamera normalCamera;
 
@@ -18,7 +17,7 @@ public class ChangeCameraAfterFinish : MonoBehaviour
 
     private void onRaceFinished(object sender, System.EventArgs e)
     {
-        Transform finishCameraPositions = currentRaceTrack.transform.Find("FinishCameraPositions");
+        Transform finishCameraPositions = GameManager.Instance.getCurrentFinishCameraPositions();
         Transform finishCameraPosition = finishCameraPositions.GetChild(Random.Range(0, finishCameraPositions.childCount - 1));
 
         CameraTarget cameraTarget = new();

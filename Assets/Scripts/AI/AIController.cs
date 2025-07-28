@@ -36,7 +36,6 @@ public class AIController : MonoBehaviour
     [SerializeField] private List<WheelCollider> rearWheelColliders;
     [SerializeField] private BoxCollider mainCollider;
 
-    [SerializeField] private GameObject currentRaceTrack;
 
     private List<Transform> waypoints;
     private int currentWaypoint;
@@ -55,16 +54,24 @@ public class AIController : MonoBehaviour
     {
         GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>().onRaceFinished += OnPlayerRaceFinished;
         GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
-        GetComponent<WaypointManager>().onRaceFinished += OnRaceFinished;
+        GetComponent<CheckpointManager>().onRaceFinished += OnRaceFinished;
 
-        startNewRace();
+        GameManager.Instance.onRaceStarted += startRace;
+    }
+
+    private void startRace(object sender, System.EventArgs e)
+    {
+        distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
+        wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
+        setNewWaypoints(GameManager.Instance.getCurrentWaypoints());
+        raceCoroutine = StartCoroutine(race());
     }
 
     private void OnDisable()
     {
         GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>().onRaceFinished -= OnPlayerRaceFinished;
         GetComponent<WaypointManager>().onWaypointPassed -= WaypointManager_onWaypointPassed;
-        GetComponent<WaypointManager>().onRaceFinished -= OnRaceFinished;
+        GetComponent<CheckpointManager>().onRaceFinished -= OnRaceFinished;
     }
 
     private void OnRaceFinished(object sender, System.EventArgs e)
@@ -85,22 +92,13 @@ public class AIController : MonoBehaviour
         currentTarget = e.currentTargetForBots;
 
     }
-
-    private void startNewRace()
-    {
-        distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
-        wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
-        setNewWaypoints();
-        raceCoroutine = StartCoroutine(race());
-    }
     
-    private void setNewWaypoints()
+    private void setNewWaypoints(Transform currentWaypointsTransform)
     {
         currentWaypoint = 0;
         waypoints = new List<Transform>();
-        Transform waypointsTransform = currentRaceTrack.transform.Find("Waypoints");
 
-        foreach (Transform t in waypointsTransform)
+        foreach (Transform t in currentWaypointsTransform)
         {
             waypoints.Add(t);
         }

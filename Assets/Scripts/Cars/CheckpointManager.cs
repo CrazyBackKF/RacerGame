@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
-    public static CheckpointManager Instance { get; private set; }
-
-    [SerializeField] private Transform currentRacetrackCheckpointsTransform;
+    [SerializeField] private bool isPlayer;
     private int maxLaps;
 
     private List<GameObject> currentCheckpointList;
     private int currentCheckpointIndex = 0;
-    private int currentLaps = 0;
+    private int currentLap = 0;
+
+    public bool finished {  get; private set; }
 
     private bool shouldChangeLap = false;
 
@@ -24,19 +24,19 @@ public class CheckpointManager : MonoBehaviour
         public int lap;
     }
 
-    private void Awake()
+    private void Start()
     {
-        Instance = this;
+        GameManager.Instance.onRaceStarted += startRace;
     }
 
-
-    public void startGame()
+    private void startRace(object sender, EventArgs e)
     {
-        getCheckpoints(currentRacetrackCheckpointsTransform);
+        finished = false;
+        getCheckpoints(GameManager.Instance.getCurrentCheckpoints());
         hideCheckpoints(currentCheckpointIndex);
         maxLaps = GameManager.Instance.getMaxLaps();
         onRaceStarted?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = maxLaps });
-        onLapFinished?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = currentLaps + 1 });
+        onLapFinished?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = currentLap + 1 });
     }
 
     private void getCheckpoints(Transform checkpointsTransform)
@@ -53,25 +53,34 @@ public class CheckpointManager : MonoBehaviour
 
     private void hideCheckpoints(int index)
     {
+        if (!isPlayer) return;
+        
         for (int i = 0; i < currentCheckpointList.Count; i++)
         {
-            if (index == i) currentCheckpointList[i].SetActive(true);
-            else currentCheckpointList[i].SetActive(false);
+            currentCheckpointList[i].transform.Find("Visuals").gameObject.SetActive(index == i);
         }
+    }
+
+    public int getCurrentLap()
+    {
+        return currentLap;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (finished) return;
+
         if (other.gameObject == currentCheckpointList[currentCheckpointIndex])
         {
             if (shouldChangeLap)
             {
                 shouldChangeLap = false;
-                currentLaps++;
-                onLapFinished?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = currentLaps + 1 });
+                currentLap++;
+                onLapFinished?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = currentLap + 1 });
 
-                if (currentLaps == maxLaps)
+                if (currentLap == maxLaps)
                 {
+                    finished = true;
                     onRaceFinished?.Invoke(this, EventArgs.Empty);
                 }
             }
@@ -80,7 +89,7 @@ public class CheckpointManager : MonoBehaviour
             else
             {
                 currentCheckpointIndex = 0;
-                if (currentLaps < maxLaps) shouldChangeLap = true;
+                if (currentLap < maxLaps) shouldChangeLap = true;
             }
 
             hideCheckpoints(currentCheckpointIndex);

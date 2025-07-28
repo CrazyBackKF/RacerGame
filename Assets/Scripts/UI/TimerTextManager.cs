@@ -10,17 +10,13 @@ public class TimerTextManager : MonoBehaviour
 
     private float time;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     private void Start()
     {
         resetTimer();
+        GameManager.Instance.onRaceStarted += startTimer;
     }
 
-    public void startTimer()
+    private void startTimer(object sender, System.EventArgs e)
     {
         stopTimer();
         resetTimer();
