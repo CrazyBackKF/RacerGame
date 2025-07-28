@@ -18,7 +18,7 @@ public class ChangeCameraAfterFinish : MonoBehaviour
     private void onRaceFinished(object sender, System.EventArgs e)
     {
         Transform finishCameraPositions = GameManager.Instance.getCurrentFinishCameraPositions();
-        Transform finishCameraPosition = finishCameraPositions.GetChild(Random.Range(0, finishCameraPositions.childCount - 1));
+        Transform finishCameraPosition = finishCameraPositions.GetChild(Random.Range(0, finishCameraPositions.childCount));
 
         CameraTarget cameraTarget = new();
         cameraTarget.TrackingTarget = finishCameraPosition;
