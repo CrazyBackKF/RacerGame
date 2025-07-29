@@ -28,7 +28,7 @@
      inkscape:document-units="mm"
      inkscape:zoom="1.0078851"
      inkscape:cx="159.74043"
-     inkscape:cy="327.41827"
+     inkscape:cy="326.4261"
      inkscape:window-width="1920"
      inkscape:window-height="1009"
      inkscape:window-x="-8"
@@ -41,6 +41,13 @@
      inkscape:label="Warstwa 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke-width:0.499999"
+       id="rect2"
+       width="183.49686"
+       height="168.27107"
+       x="-20.738558"
+       y="-8.4004288" />
     <path
        id="rect1"
        style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.758857"

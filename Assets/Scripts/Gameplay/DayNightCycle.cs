@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
+    [System.Serializable]
+    public class TimeOfDay
+    {
+        public string name;
+        public Material skyboxMaterial;
+        public float intensityValue;
+    }
+
+    [Header("Times Of Day")]
+    [SerializeField] private List<TimeOfDay> timesOfDay;
+
     [Header("Full cycle time in minutes")]
     [SerializeField] private float time;
 
@@ -21,7 +32,14 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        startDayNightCycle();
+        changeTimeOfDay(timesOfDay.Find((time) => time.name == "Night"));
+    }
+
+    private void changeTimeOfDay(TimeOfDay timeOfDay)
+    {
+        RenderSettings.skybox = timeOfDay.skyboxMaterial;
+        RenderSettings.ambientIntensity = timeOfDay.intensityValue;
+        RenderSettings.reflectionIntensity = timeOfDay.intensityValue;
     }
 
     private void startDayNightCycle()
