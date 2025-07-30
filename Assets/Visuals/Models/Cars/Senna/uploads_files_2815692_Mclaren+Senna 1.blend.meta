@@ -3,7 +3,27 @@ guid: 8d12d8e7a2be8a040902452f8739f82f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BodyPaint
+    second: {fileID: 2100000, guid: ed7c82b779729d1479f67b0f6b9eeb5c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glass
+    second: {fileID: 2100000, guid: 89a3c599d9dc15b45b22694c35236ec8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Headlight
+    second: {fileID: 2100000, guid: 51878d816cc6e8746a485f07e53e64db, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Windows
+    second: {fileID: 2100000, guid: cdcf460333d919f419ac8d6063ffe1db, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

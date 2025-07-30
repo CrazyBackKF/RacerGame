@@ -6,4 +6,5 @@
         <engine:Button text="Options" name="Options" class="button" />
         <engine:Button text="Quit" name="Quit" class="button" />
     </engine:VisualElement>
+    <engine:Label text="Label" />
 </engine:UXML>
