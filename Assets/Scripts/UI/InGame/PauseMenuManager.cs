@@ -51,7 +51,7 @@ public class PauseMenuManager : MonoBehaviour
     {
         if (shouldSubscribe)
         {
-            resumeButton = ui.rootVisualElement.Q<Button>("Resume") as Button;
+            resumeButton = ui.rootVisualElement.Q<Button>("Resume");
             resumeButton.RegisterCallback<ClickEvent>((ClickEvent evt) => pauseOrUnpaseGame(false));
         }
         else

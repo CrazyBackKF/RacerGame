@@ -12,10 +12,6 @@
     background-color: rgb(46, 204, 113);
     transition-duration: 0.3s;
     margin-right: 0;
-    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/Fonts/Roboto/Roboto-Bold.ttf?fileID=12800000&guid=769463ee29703bb4d8cbed4fd247d5a9&type=3#Roboto-Bold");
-    -unity-font-style: bold;
-    font-size: 40px;
-    color: rgb(236, 240, 241);
     -unity-text-outline-color: rgb(127, 140, 141);
     -unity-text-outline-width: 0;
     border-top-left-radius: 10px;
@@ -24,7 +20,6 @@
     border-bottom-left-radius: 10px;
     text-shadow: 1.5px 1.5px 0 rgb(44, 62, 80);
     margin-left: 1%;
-    -unity-text-align: middle-center;
 }
 
 .mainButtons:hover {
@@ -105,4 +100,12 @@
     transition-duration: 0.3s;
     scale: 1.3 1.3;
     rotate: 90deg;
+}
+
+.defaultText {
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/Fonts/Roboto/Roboto-Bold.ttf?fileID=12800000&guid=769463ee29703bb4d8cbed4fd247d5a9&type=3#Roboto-Bold");
+    -unity-font-style: bold;
+    font-size: 40px;
+    color: rgb(236, 240, 241);
+    -unity-text-align: middle-center;
 }

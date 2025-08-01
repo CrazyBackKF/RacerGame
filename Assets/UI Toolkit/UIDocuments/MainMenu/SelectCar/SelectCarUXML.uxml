@@ -1,0 +1,32 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UIDocuments/MainMenu/Home/MainMenuUSS.uss?fileID=7433441132597879392&amp;guid=6da5e11c58881034584106616bd4aa16&amp;type=3#MainMenuUSS" />
+    <Style src="project://database/Assets/UI%20Toolkit/UIDocuments/MainMenu/SelectCar/selectCarUSS.uss?fileID=7433441132597879392&amp;guid=f5c64d4b10f896a48a23fdc21c1602b3&amp;type=3#selectCarUSS" />
+    <engine:VisualElement name="Background" style="flex-grow: 1; background-color: rgb(189, 195, 199);">
+        <engine:VisualElement name="UpperPanel" style="flex-grow: 0; height: 10%;" />
+        <engine:VisualElement name="LowerPanel" style="flex-grow: 1; flex-direction: row;">
+            <engine:ScrollView style="flex-grow: 1;">
+                <engine:VisualElement name="CarsContainer" style="flex-grow: 1; flex-direction: row; flex-wrap: wrap; height: auto;">
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                    <engine:VisualElement class="carSelectionBox" />
+                </engine:VisualElement>
+            </engine:ScrollView>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

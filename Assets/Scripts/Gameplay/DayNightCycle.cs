@@ -12,6 +12,8 @@ public class DayNightCycle : MonoBehaviour
         public float intensityValue;
     }
 
+    [SerializeField] private string timeOfDayName;
+
     [Header("Times Of Day")]
     [SerializeField] private List<TimeOfDay> timesOfDay;
 
@@ -32,7 +34,7 @@ public class DayNightCycle : MonoBehaviour
 
     private void Start()
     {
-        changeTimeOfDay(timesOfDay.Find((time) => time.name == "Night"));
+        changeTimeOfDay(timesOfDay.Find((time) => time.name == timeOfDayName));
     }
 
     private void changeTimeOfDay(TimeOfDay timeOfDay)
