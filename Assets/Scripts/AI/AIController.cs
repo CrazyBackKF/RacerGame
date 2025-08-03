@@ -69,10 +69,10 @@ public class AIController : MonoBehaviour
 
     private void OnDisable()
     {
-        CheckpointManager playerManager = GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>();
-        if (playerManager != null)
+        GameObject player = GameManager.Instance.getPlayerCar();
+        if (player != null)
         {
-            playerManager.onRaceFinished -= OnPlayerRaceFinished;
+            player.GetComponent<CheckpointManager>().onRaceFinished -= OnPlayerRaceFinished;
         }
         GetComponent<WaypointManager>().onWaypointPassed -= WaypointManager_onWaypointPassed;
         GetComponent<CheckpointManager>().onRaceFinished -= OnRaceFinished;
