@@ -87,7 +87,7 @@ public class MainMenuUIManager : MonoBehaviour
             Vector2 delta = new Vector2(evt.position.x, evt.position.y) - lastPointerPos;
             lastPointerPos = evt.position;
 
-            carScrollView.scrollOffset -= new Vector2(delta.x, delta.y);
+            carScrollView.scrollOffset -= delta;
         });
 
         carScrollView.RegisterCallback<PointerUpEvent>(evt =>
