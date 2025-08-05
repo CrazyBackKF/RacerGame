@@ -6,6 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    [Header("CarList")]
+    [SerializeField] private List<CarsSO> carSOList;
+    [Space]
+    [Space]
+
     [SerializeField] private int startTimer;
     [SerializeField] private GameObject playerCar;
     [SerializeField] private GameObject currentRaceTrack;
@@ -18,6 +23,7 @@ public class GameManager : MonoBehaviour
 
     public enum State
     {
+        MainMenu,
         Countdown,
         Race
     }
@@ -27,12 +33,13 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         Instance = this;
     }
 
     private void Start()
     {
-       currentState = State.Countdown;
+       currentState = State.MainMenu;
        Inputs.Instance.changeCurrentInputMap("RaceStartCountdown");
     }
 
@@ -40,6 +47,9 @@ public class GameManager : MonoBehaviour
     {
         switch (currentState)
         {
+            case State.MainMenu:
+                break;
+
             case State.Countdown:
                 countdownTime += Time.deltaTime;
                 if (countdownTime >= startTimer)
@@ -113,5 +123,10 @@ public class GameManager : MonoBehaviour
     public Transform getCurrentFinishCameraPositions()
     {
         return currentRaceTrack.transform.Find("FinishCameraPositions");
+    }
+
+    public List<CarsSO> getCarsSO()
+    {
+        return carSOList;
     }
 }

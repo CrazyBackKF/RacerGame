@@ -1,7 +1,7 @@
 .carSelectionBox {
     flex-grow: 0;
-    width: 14%;
-    height: 40%;
+    width: 160px;
+    height: 100%;
     border-left-color: rgb(44, 62, 80);
     border-right-color: rgb(44, 62, 80);
     border-top-color: rgb(44, 62, 80);
@@ -15,36 +15,89 @@
     margin-bottom: 5px;
     margin-left: 5px;
     flex-shrink: 0;
-    flex-direction: column;
 }
 
-#Background > #LowerPanel > .unity-scroll-view--vertical > #unity-content-and-vertical-scroll-container > .unity-scroll-view__vertical-scroller > #unity-low-button {
-    display: none;
+#Background > #LowerPanel > .unity-scroll-view--horizontal > #unity-content-and-vertical-scroll-container > #unity-content-viewport > #unity-content-container {
+    margin-top: 0;
+    margin-right: 20px;
+    margin-bottom: 0;
+    margin-left: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    background-color: rgb(22, 160, 133);
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    flex-grow: 0;
+    min-width: 98%;
 }
 
-VisualElement > VisualElement > .unity-scroll-view--vertical > #unity-content-and-vertical-scroll-container > #unity-content-viewport > #unity-content-container {
-    flex-direction: row;
-    flex-wrap: wrap;
-    flex-grow: 1;
-}
-
-VisualElement > VisualElement > .unity-scroll-view--vertical > #unity-content-and-vertical-scroll-container > .unity-scroll-view__vertical-scroller > #unity-slider > .unity-slider__input > #unity-drag-container > #unity-tracker {
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider > .unity-slider__input > #unity-drag-container > #unity-tracker {
     background-color: rgb(46, 204, 113);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: auto;
+    position: absolute;
+    top: 0;
 }
 
-VisualElement > VisualElement > .unity-scroll-view--vertical > #unity-content-and-vertical-scroll-container > .unity-scroll-view__vertical-scroller > #unity-slider > .unity-slider__input > #unity-drag-container > #unity-dragger {
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider > .unity-slider__input > #unity-drag-container > #unity-dragger {
     background-color: rgb(39, 174, 96);
-    display: flex;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
-    border-bottom-left-radius: 15px;
+    border-top-width: 5px;
+    border-right-width: 5px;
+    border-bottom-width: 5px;
+    border-left-width: 5px;
+    border-left-color: rgb(44, 62, 80);
+    border-right-color: rgb(44, 62, 80);
+    border-top-color: rgb(44, 62, 80);
+    border-bottom-color: rgb(44, 62, 80);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    height: auto;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
 }
 
-#Background > #LowerPanel > .unity-scroll-view--vertical > #unity-content-and-vertical-scroll-container > .unity-scroll-view__vertical-scroller > #unity-high-button {
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-high-button {
     display: none;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-low-button {
+    display: none;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller {
+    height: 20%;
+    align-items: center;
+    margin-top: 5px;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider {
+    flex-grow: 1;
+    height: 60%;
+    justify-content: center;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider > .unity-slider__input > #unity-drag-container {
+    justify-content: center;
+    flex-grow: 1;
+    height: 90%;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider > .unity-slider__input {
+    justify-content: center;
+    align-items: center;
+}
+
+#Background > #LowerPanel > .unity-scroll-view--horizontal > #unity-content-and-vertical-scroll-container {
+    height: 75%;
+    flex-grow: 0;
 }
