@@ -136,7 +136,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Sterngth: 13.9
-    - _Strength: 0.01
+    - _Strength: 0.25
     - _Surface: 0
     - _WorkflowMode: 1
     - _ZWrite: 1

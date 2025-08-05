@@ -11,9 +11,9 @@ public class ChangeLensDistWithSpeed : MonoBehaviour
     private Rigidbody rb;
     private LensDistortion distortion;
 
-    private float maxLensDistortion = 0.5f;
-    private float maxSpeed = 30;
-    private float minSpeed = 20;
+    private float maxLensDistortion = 0.6f;
+    private float maxSpeed = 40;
+    private float minSpeed = 0;
 
     private void Start()
     {
@@ -29,10 +29,20 @@ public class ChangeLensDistWithSpeed : MonoBehaviour
 
     private void Update()
     {
-        if (rb.linearVelocity.sqrMagnitude > minSpeed * minSpeed)
+        if (!GameManager.Instance.isPlayerRacing())
+        {
+            distortion.intensity.value = 0;
+        }
+
+        else if (rb.linearVelocity.sqrMagnitude > minSpeed * minSpeed)
         {
             float distortionValue = Mathf.Clamp(rb.linearVelocity.magnitude * maxLensDistortion / maxSpeed, 0, maxLensDistortion);
             distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, -distortionValue, Time.deltaTime * changeSpeed);
+        }
+
+        else
+        {
+            distortion.intensity.value = Mathf.Lerp(distortion.intensity.value, 0, Time.deltaTime * changeSpeed);
         }
     }
 }

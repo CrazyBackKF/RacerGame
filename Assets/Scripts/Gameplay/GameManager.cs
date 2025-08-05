@@ -14,8 +14,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int startTimer;
     [SerializeField] private GameObject playerCar;
     [SerializeField] private GameObject currentRaceTrack;
+    [SerializeField] private bool shouldPlay;
     private float countdownTime;
     private List<GameObject> cars;
+    private CheckpointManager playerCheckpointManager;
 
     [SerializeField] private int maxLaps;
 
@@ -39,7 +41,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-       currentState = State.MainMenu;
+        playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
+        currentState = State.MainMenu;
+        if (shouldPlay)
+        {
+            currentState = State.Countdown;
+        }
        Inputs.Instance.changeCurrentInputMap("RaceStartCountdown");
     }
 
@@ -128,5 +135,10 @@ public class GameManager : MonoBehaviour
     public List<CarsSO> getCarsSO()
     {
         return carSOList;
+    }
+
+    public bool isPlayerRacing()
+    {
+        return !playerCheckpointManager.finished;
     }
 }
