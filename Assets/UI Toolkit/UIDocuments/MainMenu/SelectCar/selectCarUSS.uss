@@ -1,11 +1,23 @@
+.carSelectionBoxBorder {
+    border-left-color: rgb(52, 73, 94);
+    border-right-color: rgb(52, 73, 94);
+    border-top-color: rgb(52, 73, 94);
+    border-bottom-color: rgb(52, 73, 94);
+    background-color: rgb(52, 73, 94);
+}
+
+.carSelectionBoxBorderSelected {
+    border-left-color: rgb(52, 152, 219);
+    border-right-color: rgb(52, 152, 219);
+    border-top-color: rgb(52, 152, 219);
+    border-bottom-color: rgb(52, 152, 219);
+    background-color: rgb(52, 152, 219);
+}
+
 .carSelectionBox {
     flex-grow: 0;
     width: 160px;
     height: 100%;
-    border-left-color: rgb(44, 62, 80);
-    border-right-color: rgb(44, 62, 80);
-    border-top-color: rgb(44, 62, 80);
-    border-bottom-color: rgb(44, 62, 80);
     border-top-width: 10px;
     border-right-width: 10px;
     border-bottom-width: 10px;
@@ -84,6 +96,10 @@
     flex-grow: 1;
     height: 60%;
     justify-content: center;
+    border-left-color: rgb(44, 62, 80);
+    border-right-color: rgb(44, 62, 80);
+    border-top-color: rgb(44, 62, 80);
+    border-bottom-color: rgb(44, 62, 80);
 }
 
 #Background > #LowerPanel > .unity-scroll-view--horizontal > .unity-scroll-view__horizontal-scroller > #unity-slider > .unity-slider__input > #unity-drag-container {
@@ -100,4 +116,12 @@
 #Background > #LowerPanel > .unity-scroll-view--horizontal > #unity-content-and-vertical-scroll-container {
     height: 75%;
     flex-grow: 0;
+}
+
+.carSelectionBoxBorderSelected {
+    border-left-color: rgb(52, 152, 219);
+    border-right-color: rgb(52, 152, 219);
+    border-top-color: rgb(52, 152, 219);
+    border-bottom-color: rgb(52, 152, 219);
+    background-color: rgb(52, 152, 219);
 }

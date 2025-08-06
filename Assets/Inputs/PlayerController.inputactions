@@ -165,15 +165,31 @@
                     "initialStateCheck": false
                 }
             ],
+            "bindings": []
+        },
+        {
+            "name": "MainMenu",
+            "id": "e8d88e01-8206-4e18-8f36-ca9f9b559d6b",
+            "actions": [
+                {
+                    "name": "SelectCarCamera",
+                    "type": "Value",
+                    "id": "8b4f5a1f-1865-4b51-aaf1-13b329c303ce",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "a71f6305-974e-4b2e-b560-1967933ecaf7",
-                    "path": "<Keyboard>/w",
+                    "id": "cecaf8fc-03bc-46c7-8804-4279562d6266",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "SelectCarCamera",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
