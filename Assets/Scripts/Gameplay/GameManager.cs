@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     [Header("CarList")]
     [SerializeField] private List<CarsSO> carSOList;
+    private int currentCarIndex;
     [Space]
     [Space]
 
@@ -41,13 +42,19 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
         currentState = State.MainMenu;
         if (shouldPlay)
         {
             currentState = State.Countdown;
         }
        Inputs.Instance.changeCurrentInputMap("RaceStartCountdown");
+
+       SelectCarUIScript.Instance.onCarSelected += SelectCarUIScript_onCarSelected;
+    }
+
+    private void SelectCarUIScript_onCarSelected(object sender, SelectCarUIScript.OnCarSelectedEventArgs e)
+    {
+        currentCarIndex = e.carIndex;
     }
 
     private void Update()
@@ -61,6 +68,7 @@ public class GameManager : MonoBehaviour
                 countdownTime += Time.deltaTime;
                 if (countdownTime >= startTimer)
                 {
+                    playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
                     Inputs.Instance.changeCurrentInputMap("MainGameplay");
                     currentState = State.Race;
                     findCars();

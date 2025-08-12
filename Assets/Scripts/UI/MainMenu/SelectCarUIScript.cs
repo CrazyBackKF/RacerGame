@@ -1,14 +1,20 @@
+using MyVisualElements;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
-using System.Linq;
 
 public class SelectCarUIScript : MonoBehaviour
 {
+    public static SelectCarUIScript Instance {  get; private set; }
+
     [SerializeField] private UIDocument mainMenuUI;
     [SerializeField] private VisualTreeAsset carTemplate;
-    [SerializeField] private CinemachineOrbitalFollow cameraOrbitalFollow;
+    [SerializeField] private CinemachineInputAxisController cameraInputAxisController;
     [SerializeField] private Transform carModelPlace;
 
     List<CarsSO> carsSOList;
@@ -18,6 +24,7 @@ public class SelectCarUIScript : MonoBehaviour
     private ScrollView carScrollView;
     private VisualElement carRenderTexture;
     private bool isDraggingCarScrollView;
+    private Vector2 lastPointerPosScrollView;
     private Vector2 lastPointerPos;
 
     List<VisualElement> carSelectButtons;
@@ -25,17 +32,56 @@ public class SelectCarUIScript : MonoBehaviour
 
     private Label carNameLabel;
 
+    private Label massLabel;
+    private FillBarVisualElement maxSpeedBar;
+    private FillBarVisualElement accelerationBar;
+    private FillBarVisualElement brakesBar;
+
+    private float maxSpeed = 50;
+    private float maxAcceleration = 2000;
+    private float maxBrakes= 3500;
+
+    public event EventHandler<OnCarSelectedEventArgs> onCarSelected;
+
+    public class OnCarSelectedEventArgs : EventArgs
+    {
+        public int carIndex;
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+        Debug.Log("instance");
+    }
+
     private void Start()
     {
-        cameraOrbitalFollow.enabled = false;
+        setOrbitalFollow(false);
+        setBars();
         fillSelectCarMenu();
         addEventToButtonsInScrollView();
         dragCarRenderTexture();
+        selectCar(0);
+
+        root.Q<Button>("SelectButton").RegisterCallback<ClickEvent>((ClickEvent e) =>
+        {
+            onCarSelected?.Invoke(this, new OnCarSelectedEventArgs { carIndex = (int)currentSelectIndex });
+            root.Q<VisualElement>("SelectCarMenu").RemoveFromClassList("animationUp");
+        });
+    }
+
+    private void setBars()
+    {
+        root = mainMenuUI.rootVisualElement;
+
+        massLabel = root.Q<Label>("MassLabel");
+        maxSpeedBar = root.Q<FillBarVisualElement>("MaxSpeedBar");
+        accelerationBar = root.Q<FillBarVisualElement>("AccelerationBar");
+        brakesBar = root.Q<FillBarVisualElement>("BrakesBar");
     }
 
     private void fillSelectCarMenu()
     {
-        root = mainMenuUI.rootVisualElement;
 
         carsSOList = GameManager.Instance.getCarsSO();
         carScrollView = root.Q<ScrollView>("CarScrollView");
@@ -93,6 +139,7 @@ public class SelectCarUIScript : MonoBehaviour
 
         carRenderTexture.RegisterCallback<PointerDownEvent>((PointerDownEvent evt) =>
         {
+            lastPointerPos = Mouse.current.position.ReadValue();
             UnityEngine.Cursor.lockState = CursorLockMode.Locked;
             carRenderTexture.CapturePointer(evt.pointerId);
             setOrbitalFollow(true);
@@ -101,6 +148,7 @@ public class SelectCarUIScript : MonoBehaviour
         carRenderTexture.RegisterCallback<PointerUpEvent>((PointerUpEvent evt) =>
         {
             UnityEngine.Cursor.lockState = CursorLockMode.None;
+            Mouse.current.WarpCursorPosition(lastPointerPos);
             carRenderTexture.ReleasePointer(evt.pointerId);
             setOrbitalFollow(false);
         });
@@ -108,7 +156,11 @@ public class SelectCarUIScript : MonoBehaviour
 
     private void setOrbitalFollow(bool enabled)
     {
-        cameraOrbitalFollow.enabled = enabled;
+        foreach (CinemachineInputAxisController.Controller controller in cameraInputAxisController.Controllers)
+        {
+            controller.Enabled = enabled;
+        }
+  
     }
 
     private void selectCar(int index)
@@ -147,5 +199,15 @@ public class SelectCarUIScript : MonoBehaviour
         }
 
         GameObject car = Instantiate(carModel, carModelPlace.position, carModel.transform.rotation, carModelPlace);
+
+        // Zmieniam staty w barach
+        maxSpeedBar.fillPercentage = Mathf.Clamp01(carsSOList[index].maxSpeed / maxSpeed);
+        accelerationBar.fillPercentage = Mathf.Clamp01(carsSOList[index].acceleration / maxAcceleration);
+        brakesBar.fillPercentage = Mathf.Clamp01(carsSOList[index].braking / maxBrakes);
+        massLabel.text = carsSOList[index].mass.ToString() + " kg";
+
+        maxSpeedBar.MarkDirtyRepaint();
+        accelerationBar.MarkDirtyRepaint();
+        brakesBar.MarkDirtyRepaint();
     }
 }

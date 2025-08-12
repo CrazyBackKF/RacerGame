@@ -125,3 +125,24 @@
     border-bottom-color: rgb(52, 152, 219);
     background-color: rgb(52, 152, 219);
 }
+
+.fillBoxText {
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/Fonts/Roboto/Roboto-Bold.ttf?fileID=12800000&guid=769463ee29703bb4d8cbed4fd247d5a9&type=3#Roboto-Bold");
+    -unity-font-style: bold;
+    font-size: 40px;
+    color: rgb(236, 240, 241);
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+    -unity-text-outline-width: 3px;
+    -unity-text-outline-color: rgb(52, 73, 94);
+}
+
+#SelectButton:hover {
+    transition-duration: 0.3s;
+    scale: 1.2 1.2;
+    background-color: rgb(243, 156, 18);
+}
+
+#SelectButton {
+    background-color: rgb(241, 196, 15);
+}
