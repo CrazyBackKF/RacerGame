@@ -118,14 +118,6 @@
     flex-grow: 0;
 }
 
-.carSelectionBoxBorderSelected {
-    border-left-color: rgb(52, 152, 219);
-    border-right-color: rgb(52, 152, 219);
-    border-top-color: rgb(52, 152, 219);
-    border-bottom-color: rgb(52, 152, 219);
-    background-color: rgb(52, 152, 219);
-}
-
 .fillBoxText {
     -unity-font-definition: url("project://database/Assets/UI%20Toolkit/Fonts/Roboto/Roboto-Bold.ttf?fileID=12800000&guid=769463ee29703bb4d8cbed4fd247d5a9&type=3#Roboto-Bold");
     -unity-font-style: bold;
@@ -145,4 +137,15 @@
 
 #SelectButton {
     background-color: rgb(241, 196, 15);
+}
+
+#ReturnButtonSelectCarMenu {
+    -unity-background-image-tint-color: rgb(52, 73, 94);
+    transition-duration: 0.3s;
+}
+
+#ReturnButtonSelectCarMenu:hover {
+    -unity-background-image-tint-color: rgb(44, 62, 80);
+    transition-duration: 0.3s;
+    scale: 1.05 1.05;
 }

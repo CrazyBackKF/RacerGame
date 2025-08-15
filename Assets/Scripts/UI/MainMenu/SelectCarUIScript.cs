@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public class SelectCarUIScript : MonoBehaviour
 {
-    public static SelectCarUIScript Instance {  get; private set; }
+    public static SelectCarUIScript Instance { get; private set; }
 
     [SerializeField] private UIDocument mainMenuUI;
     [SerializeField] private VisualTreeAsset carTemplate;
@@ -28,7 +28,8 @@ public class SelectCarUIScript : MonoBehaviour
     private Vector2 lastPointerPos;
 
     List<VisualElement> carSelectButtons;
-    private int? currentSelectIndex = null;
+    private int currentSelectIndex = 0;
+    private int lastSelectIndex = 0;
 
     private Label carNameLabel;
 
@@ -39,7 +40,7 @@ public class SelectCarUIScript : MonoBehaviour
 
     private float maxSpeed = 50;
     private float maxAcceleration = 2000;
-    private float maxBrakes= 3500;
+    private float maxBrakes = 3500;
 
     public event EventHandler<OnCarSelectedEventArgs> onCarSelected;
 
@@ -51,7 +52,6 @@ public class SelectCarUIScript : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        Debug.Log("instance");
     }
 
     private void Start()
@@ -65,7 +65,16 @@ public class SelectCarUIScript : MonoBehaviour
 
         root.Q<Button>("SelectButton").RegisterCallback<ClickEvent>((ClickEvent e) =>
         {
+            lastSelectIndex = currentSelectIndex;
             onCarSelected?.Invoke(this, new OnCarSelectedEventArgs { carIndex = (int)currentSelectIndex });
+            root.Q<VisualElement>("SelectCarMenu").RemoveFromClassList("animationUp");
+            carScrollView.ScrollTo(carSelectButtons[currentSelectIndex]);
+        });
+
+        root.Q<Button>("ReturnButtonSelectCarMenu").RegisterCallback<ClickEvent>((ClickEvent e) =>
+        {
+            selectCar(lastSelectIndex);
+            currentSelectIndex = lastSelectIndex;
             root.Q<VisualElement>("SelectCarMenu").RemoveFromClassList("animationUp");
         });
     }
@@ -160,24 +169,22 @@ public class SelectCarUIScript : MonoBehaviour
         {
             controller.Enabled = enabled;
         }
-  
+
     }
 
     private void selectCar(int index)
     {
         // Ustawiam klasy ¿eby zmieniæ kolor po zaznaczeniu
-        if (currentSelectIndex != null)
-        {
-            carSelectButtons[(int)currentSelectIndex].Q<VisualElement>("MainBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
-            carSelectButtons[(int)currentSelectIndex].Q<VisualElement>("SecondBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
-            carSelectButtons[(int)currentSelectIndex].Q<VisualElement>("CarNameBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
-        }
+        carSelectButtons[currentSelectIndex].Q<VisualElement>("MainBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
+        carSelectButtons[currentSelectIndex].Q<VisualElement>("SecondBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
+        carSelectButtons[currentSelectIndex].Q<VisualElement>("CarNameBorder").RemoveFromClassList("carSelectionBoxBorderSelected");
 
         carSelectButtons[index].Q<VisualElement>("MainBorder").AddToClassList("carSelectionBoxBorderSelected");
         carSelectButtons[index].Q<VisualElement>("SecondBorder").AddToClassList("carSelectionBoxBorderSelected");
         carSelectButtons[index].Q<VisualElement>("CarNameBorder").AddToClassList("carSelectionBoxBorderSelected");
 
         currentSelectIndex = index;
+        carScrollView.ScrollTo(carSelectButtons[index]);
 
         // Ustawiam wartoœci w menu, takie jak w SO
 

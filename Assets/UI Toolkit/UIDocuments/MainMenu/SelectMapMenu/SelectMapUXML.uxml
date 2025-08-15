@@ -1,0 +1,16 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/UIDocuments/MainMenu/SelectMapMenu/PlayMenuUSS.uss?fileID=7433441132597879392&amp;guid=8b75e9263b0830a49817fca32af64022&amp;type=3#PlayMenuUSS" />
+    <Style src="project://database/Assets/UI%20Toolkit/UIDocuments/MainMenu/Home/MainMenuUSS.uss?fileID=7433441132597879392&amp;guid=6da5e11c58881034584106616bd4aa16&amp;type=3#MainMenuUSS" />
+    <engine:VisualElement name="Background" style="flex-grow: 1; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: rgb(189, 195, 199);">
+        <engine:VisualElement name="UpperPanel" style="flex-grow: 0; height: 10%;" />
+        <engine:VisualElement name="MainContainer" style="flex-grow: 0; height: 70%; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; background-color: rgb(22, 160, 133); margin-right: 3%; margin-left: 3%; flex-shrink: 0; min-height: 600px; margin-top: 5%; border-left-color: rgb(52, 73, 94); border-right-color: rgb(52, 73, 94); border-top-color: rgb(52, 73, 94); border-bottom-color: rgb(52, 73, 94);">
+            <engine:ScrollView mode="Horizontal" horizontal-scroller-visibility="AlwaysVisible" name="MapsScrollView" style="flex-grow: 1;">
+                <engine:VisualElement name="MapsContainer" style="flex-grow: 1; flex-direction: row;" />
+            </engine:ScrollView>
+        </engine:VisualElement>
+        <engine:VisualElement name="LowerPanel" style="flex-grow: 0; height: 30%; flex-direction: row-reverse; align-items: center; justify-content: center;">
+            <engine:Button text="GO!" name="PlayButtonSelectMenu" class="defaultText" style="height: 50%; width: 25%; margin-right: 0; border-top-left-radius: 40px; border-top-right-radius: 40px; border-bottom-right-radius: 40px; border-bottom-left-radius: 40px; font-size: 80px; flex-grow: 0; -unity-text-outline-color: rgb(52, 73, 94); -unity-text-outline-width: 3px; border-left-color: rgb(52, 73, 94); border-right-color: rgb(52, 73, 94); border-top-color: rgb(52, 73, 94); border-bottom-color: rgb(52, 73, 94); border-top-width: 5px; border-right-width: 5px; border-bottom-width: 5px; border-left-width: 5px; margin-top: 0; margin-bottom: 0; margin-left: 0;" />
+            <engine:Button name="ReturnButtonSelectMapMenu" style="position: absolute; top: auto; right: auto; width: 80px; height: 80px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(236, 240, 241); background-image: url(&quot;project://database/Assets/UI%20Toolkit/Icons/arrow-left-icon.png?fileID=21300000&amp;guid=bb808a7bd1667924db9dc847eef2afce&amp;type=3#arrow-left-icon&quot;); background-size: 70% 70%; margin-right: 79px; left: 25%;" />
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

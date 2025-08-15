@@ -124,3 +124,12 @@
     transition-duration: 0.5s;
     opacity: 1;
 }
+
+.defaultText {
+    -unity-font-definition: url("project://database/Assets/UI%20Toolkit/Fonts/Roboto/Roboto-Bold.ttf?fileID=12800000&guid=769463ee29703bb4d8cbed4fd247d5a9&type=3#Roboto-Bold");
+    -unity-font-style: bold;
+    font-size: 40px;
+    color: rgb(236, 240, 241);
+    -unity-text-align: middle-center;
+    flex-grow: 1;
+}

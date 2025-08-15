@@ -11,6 +11,11 @@ public class GameManager : MonoBehaviour
     private int currentCarIndex;
     [Space]
     [Space]
+    [Header("MapList")]
+    [SerializeField] private List<MapsSO> mapSOList;
+    private int currentMapIndex;
+    [Space]
+    [Space]
 
     [SerializeField] private int startTimer;
     [SerializeField] private GameObject playerCar;
@@ -144,6 +149,12 @@ public class GameManager : MonoBehaviour
     {
         return carSOList;
     }
+
+    public List<MapsSO> getMapsSO()
+    {
+        return mapSOList;
+    }
+
 
     public bool isPlayerRacing()
     {

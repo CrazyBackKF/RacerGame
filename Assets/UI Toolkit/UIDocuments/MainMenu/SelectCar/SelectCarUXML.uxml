@@ -50,4 +50,5 @@
         </engine:VisualElement>
     </engine:VisualElement>
     <engine:Button text="Select" name="SelectButton" class="defaultText" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; position: absolute; right: 3%; top: 51%; width: 15%; height: 7%; border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; font-size: 50px; -unity-text-outline-width: 3px; -unity-text-outline-color: rgb(52, 73, 94); transition-duration: 0.3s;" />
+    <engine:Button name="ReturnButtonSelectCarMenu" style="position: absolute; top: 51%; right: 20%; width: 80px; height: 80px; border-top-left-radius: 50%; border-top-right-radius: 50%; border-bottom-right-radius: 50%; border-bottom-left-radius: 50%; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(236, 240, 241); background-image: url(&quot;project://database/Assets/UI%20Toolkit/Icons/arrow-left-icon.png?fileID=21300000&amp;guid=bb808a7bd1667924db9dc847eef2afce&amp;type=3#arrow-left-icon&quot;); background-size: 70% 70%;" />
 </engine:UXML>

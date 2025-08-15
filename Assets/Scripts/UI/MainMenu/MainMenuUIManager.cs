@@ -9,6 +9,7 @@ public class MainMenuUIManager : MonoBehaviour
     [SerializeField] private UIDocument mainMenuUI;
 
     private VisualElement selectCarElement;
+    private VisualElement selectMapElement;
     private VisualElement root;
 
     private void Start()
@@ -18,7 +19,7 @@ public class MainMenuUIManager : MonoBehaviour
 
     private void playMenu(ClickEvent evt)
     {
-        
+        selectMapElement.AddToClassList("animationUp");
     }
 
     private void selectCarMenu(ClickEvent evt)
@@ -52,5 +53,6 @@ public class MainMenuUIManager : MonoBehaviour
         root.Q<Button>("ExitButton").RegisterCallback<ClickEvent>(quitGame);
 
         selectCarElement = root.Q<VisualElement>("SelectCarMenu");
+        selectMapElement = root.Q<VisualElement>("SelectMapMenu");
     }
 }
