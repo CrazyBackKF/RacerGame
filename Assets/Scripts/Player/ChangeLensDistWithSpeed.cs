@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 public class ChangeLensDistWithSpeed : MonoBehaviour
 {
-    [SerializeField] private Volume globalVolume;
+    private Volume globalVolume;
     [SerializeField] private float changeSpeed;
 
     private Rigidbody rb;
@@ -18,6 +18,9 @@ public class ChangeLensDistWithSpeed : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        globalVolume = GameManager.Instance.getGlobalVolume();
+
         if (rb == null) Debug.Log("Rigidbody jest null w skrypcie " + typeof(ChangeLensDistWithSpeed));
 
         if (globalVolume.profile.TryGet<LensDistortion>(out LensDistortion distortion))

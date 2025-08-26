@@ -8,11 +8,21 @@ public class CarAnimations : MonoBehaviour
     [SerializeField] private float steeringWheelRotationSpeed = 2;
     [SerializeField] private float turnSpeed = 5;
 
-    [Header("Components")]
-    [SerializeField] private Rigidbody rb;
-    [SerializeField] private List<Transform> wheelTransforms;
-    [SerializeField] private List<WheelCollider> wheelColliders;
-    [SerializeField] private Transform steeringWheelTransform;
+    private Rigidbody rb;
+    private List<Transform> wheelTransforms;
+    private List<WheelCollider> wheelColliders;
+    private Transform steeringWheelTransform;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        CarData carData = transform.GetChild(0).GetComponent<CarData>();
+        setVariables(carData.getWheelTransforms(), carData.getWheelColliders(), carData.getSteeringWheelTransform());
+    }
 
     private void Update()
     {
@@ -31,5 +41,12 @@ public class CarAnimations : MonoBehaviour
         {
             collider.transform.localRotation = Quaternion.Slerp(collider.transform.localRotation, Quaternion.Euler(0, 0, collider.steerAngle), turnSpeed * Time.deltaTime);
         }
+    }
+
+    private void setVariables(List<Transform> wheelTransforms, List<WheelCollider> wheelColliders, Transform steeringWheelTransform)
+    {
+        this.wheelTransforms = wheelTransforms;
+        this.wheelColliders = wheelColliders;
+        this.steeringWheelTransform = steeringWheelTransform;
     }
 }

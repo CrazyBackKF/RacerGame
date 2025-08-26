@@ -7,8 +7,19 @@ public class WheelStabilizator : MonoBehaviour
     [SerializeField] private float stabilizatorPower = 1f;
 
     [Header("Components")]
-    [SerializeField] private List<WheelCollider> wheelColliders;
+    private List<WheelCollider> wheelColliders;
     [SerializeField] private Rigidbody rb;
+
+    private void Start()
+    {
+        CarData carData = transform.GetChild(0).GetComponent<CarData>();
+        wheelColliders = carData.getWheelColliders();
+
+        foreach (WheelCollider collider in wheelColliders)
+        {
+            collider.enabled = true;
+        }
+    }
 
     private void Update()
     {
@@ -19,5 +30,10 @@ public class WheelStabilizator : MonoBehaviour
                 rb.AddForceAtPosition(Vector3.down * stabilizatorPower, wheelCollider.transform.position, ForceMode.Force);
             }
         }
+    }
+
+    public void setWheelColliders(List<WheelCollider> wheelColliders)
+    {
+        this.wheelColliders = wheelColliders;
     }
 }

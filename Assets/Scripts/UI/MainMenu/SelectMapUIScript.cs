@@ -10,7 +10,7 @@ using UnityEngine.UIElements;
 
 public class SelectMapUIScript : MonoBehaviour
 {
-    public static SelectMapUIScript Instance {  get; private set; }
+    public static SelectMapUIScript Instance { get; private set; }
 
     [SerializeField] private UIDocument mainMenuUI;
     [SerializeField] private VisualTreeAsset mapTemplate;
@@ -22,14 +22,8 @@ public class SelectMapUIScript : MonoBehaviour
     private VisualElement mapsContainer;
 
     List<VisualElement> mapsSelectButtons;
-    private int? currentSelectIndex = null;
+    private int currentSelectIndex = 0;
 
-    public event EventHandler<OnCarSelectedEventArgs> onMapSelected;
-
-    public class OnCarSelectedEventArgs : EventArgs
-    {
-        public int carIndex;
-    }
 
     private void Awake()
     {
@@ -44,8 +38,8 @@ public class SelectMapUIScript : MonoBehaviour
 
         root.Q<Button>("PlayButtonSelectMenu").RegisterCallback<ClickEvent>((ClickEvent e) =>
         {
-            onMapSelected?.Invoke(this, new OnCarSelectedEventArgs { carIndex = (int)currentSelectIndex });
             root.Q<VisualElement>("SelectMapMenu").RemoveFromClassList("animationUp");
+            SceneLoader.Instance.loadLevel(mapsSOList[currentSelectIndex].sceneIndex);
         });
 
         root.Q<Button>("ReturnButtonSelectMapMenu").RegisterCallback<ClickEvent>((ClickEvent e) =>
@@ -107,13 +101,10 @@ public class SelectMapUIScript : MonoBehaviour
 
     private void selectMap(int index)
     {
-        // Ustawiam klasy ¿eby zmieniæ kolor po zaznaczeniu
-        if (currentSelectIndex != null)
-        {
-            mapsSelectButtons[(int)currentSelectIndex].Q<VisualElement>("MainBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
-            mapsSelectButtons[(int)currentSelectIndex].Q<VisualElement>("SecondBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
-            mapsSelectButtons[(int)currentSelectIndex].Q<VisualElement>("MapNameBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
-        }
+        mapsSelectButtons[currentSelectIndex].Q<VisualElement>("MainBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
+        mapsSelectButtons[currentSelectIndex].Q<VisualElement>("SecondBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
+        mapsSelectButtons[currentSelectIndex].Q<VisualElement>("MapNameBorder").RemoveFromClassList("mapSelectionBoxBorderSelected");
+
         mapsSelectButtons[index].Q<VisualElement>("MainBorder").AddToClassList("mapSelectionBoxBorderSelected");
         mapsSelectButtons[index].Q<VisualElement>("SecondBorder").AddToClassList("mapSelectionBoxBorderSelected");
         mapsSelectButtons[index].Q<VisualElement>("MapNameBorder").AddToClassList("mapSelectionBoxBorderSelected");

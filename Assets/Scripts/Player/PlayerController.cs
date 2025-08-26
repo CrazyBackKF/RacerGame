@@ -21,14 +21,13 @@ public class PlayerController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private List<WheelCollider> wheelColliders;
-    [SerializeField] private List<WheelCollider> frontWheelColliders;
-    [SerializeField] private List<WheelCollider> rearWheelColliders;
-    [SerializeField] private List<Transform> frontWheelTransforms;
+    private List<WheelCollider> wheelColliders;
+    private List<WheelCollider> frontWheelColliders;
+    private List<WheelCollider> rearWheelColliders;
 
 
     private List<Transform> waypoints;
-    private int currentWaypoint; 
+    private int currentWaypoint;
     private bool isCarReseting = false;
     private Coroutine resetCoroutine;
 
@@ -43,6 +42,9 @@ public class PlayerController : MonoBehaviour
 
         GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
         GameManager.Instance.onRaceStarted += startRace;
+
+        CarData carData = transform.GetChild(0).GetComponent<CarData>();
+        setVariables(carData.getWheelColliders(), carData.getFrontWheelColliders(), carData.getRearWheelColliders());
     }
 
     private void startRace(object sender, EventArgs e)
@@ -73,7 +75,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!isRaceStarted) return;
 
-        Vector3 localRigidbody = transform.InverseTransformDirection(rb.linearVelocity); 
+        Vector3 localRigidbody = transform.InverseTransformDirection(rb.linearVelocity);
         // jazda
         if (!Inputs.Instance.isAccelerating() && !Inputs.Instance.isDeaccelerating())
         {
@@ -230,5 +232,12 @@ public class PlayerController : MonoBehaviour
         transform.position = waypoints[Mathf.Clamp(currentWaypoint - 1, 0, waypoints.Count - 1)].position;
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
         isCarReseting = false;
+    }
+
+    private void setVariables(List<WheelCollider> wheelColliders, List<WheelCollider> frontWheelColliders, List<WheelCollider> rearWheelColliders)
+    {
+        this.wheelColliders = wheelColliders;
+        this.frontWheelColliders = frontWheelColliders;
+        this.rearWheelColliders = rearWheelColliders;
     }
 }

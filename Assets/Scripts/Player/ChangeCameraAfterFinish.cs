@@ -3,8 +3,14 @@ using UnityEngine;
 
 public class ChangeCameraAfterFinish : MonoBehaviour
 {
-    [SerializeField] private CinemachineCamera finishCamera;
-    [SerializeField] private CinemachineCamera normalCamera;
+    private CinemachineCamera finishCamera;
+    private CinemachineCamera normalCamera;
+
+    private void Start()
+    {
+        normalCamera = GameManager.Instance.getCurrentRacetrackData().getMainCinemachineCamera();
+        finishCamera = GameManager.Instance.getCurrentRacetrackData().getFinishCinemachineCamera();
+    }
 
     private void OnEnable()
     {

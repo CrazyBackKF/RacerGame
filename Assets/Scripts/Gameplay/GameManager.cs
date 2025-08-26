@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
+    private const int botsNumber = 3;
+
     public static GameManager Instance { get; private set; }
 
     [Header("CarList")]
@@ -18,8 +22,8 @@ public class GameManager : MonoBehaviour
     [Space]
 
     [SerializeField] private int startTimer;
-    [SerializeField] private GameObject playerCar;
-    [SerializeField] private GameObject currentRaceTrack;
+    private RacetrackData racetrackData;
+    private GameObject playerCar;
     [SerializeField] private bool shouldPlay;
     private float countdownTime;
     private List<GameObject> cars;
@@ -28,6 +32,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxLaps;
 
     public event EventHandler onRaceStarted;
+    public event EventHandler onGameConfigurated;
+
+    [SerializeField] private GameObject playerCarPrefab;
+    [SerializeField] private GameObject botPrefab;
 
     public enum State
     {
@@ -52,9 +60,32 @@ public class GameManager : MonoBehaviour
         {
             currentState = State.Countdown;
         }
-       Inputs.Instance.changeCurrentInputMap("RaceStartCountdown");
+        Inputs.Instance.changeCurrentInputMap("RaceStartCountdown");
 
-       SelectCarUIScript.Instance.onCarSelected += SelectCarUIScript_onCarSelected;
+        SelectCarUIScript.Instance.onCarSelected += SelectCarUIScript_onCarSelected;
+        SceneLoader.Instance.onLevelLoaded += SceneLoader_onLevelLoaded;
+    }
+
+    private void SceneLoader_onLevelLoaded(object sender, EventArgs e)
+    {
+        racetrackData = GameObject.Find("RacetrackData").GetComponent<RacetrackData>();
+
+        playerCar = Instantiate(playerCarPrefab, racetrackData.getPlaces().GetChild(0).position, racetrackData.getPlaces().GetChild(0).rotation);
+        GameObject carModel = Instantiate(carSOList[currentCarIndex].model, playerCar.transform);
+
+        playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
+
+        racetrackData.getMainCinemachineCamera().Target.TrackingTarget = playerCar.transform;
+
+
+        for (int i = 1; i <= botsNumber; i++)
+        {
+            Instantiate(botPrefab, racetrackData.getPlaces().GetChild(i).position, racetrackData.getPlaces().GetChild(i).rotation);
+        }
+
+        onGameConfigurated?.Invoke(this, EventArgs.Empty);
+
+        currentState = State.Countdown;
     }
 
     private void SelectCarUIScript_onCarSelected(object sender, SelectCarUIScript.OnCarSelectedEventArgs e)
@@ -73,7 +104,6 @@ public class GameManager : MonoBehaviour
                 countdownTime += Time.deltaTime;
                 if (countdownTime >= startTimer)
                 {
-                    playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
                     Inputs.Instance.changeCurrentInputMap("MainGameplay");
                     currentState = State.Race;
                     findCars();
@@ -125,24 +155,29 @@ public class GameManager : MonoBehaviour
         return playerCar;
     }
 
-    public GameObject getCurrentRaceTrack()
+    public RacetrackData getCurrentRacetrackData()
     {
-        return currentRaceTrack;
+        return racetrackData;
+    }
+
+    public Transform getCurrentRaceTrack()
+    {
+        return racetrackData.getRaceTrack();
     }
 
     public Transform getCurrentCheckpoints()
     {
-        return currentRaceTrack.transform.Find("Checkpoints");
+        return racetrackData.getCheckpoints();
     }
 
     public Transform getCurrentWaypoints()
     {
-        return currentRaceTrack.transform.Find("Waypoints");
+        return racetrackData.getWaypoints();
     }
 
     public Transform getCurrentFinishCameraPositions()
     {
-        return currentRaceTrack.transform.Find("FinishCameraPositions");
+        return racetrackData.getFinishCameraPositions();
     }
 
     public List<CarsSO> getCarsSO()
@@ -155,6 +190,10 @@ public class GameManager : MonoBehaviour
         return mapSOList;
     }
 
+    public Volume getGlobalVolume()
+    {
+        return racetrackData.getGlobalVolume();
+    }
 
     public bool isPlayerRacing()
     {

@@ -31,9 +31,9 @@ public class AIController : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
-    [SerializeField] private List<WheelCollider> wheelColliders;
-    [SerializeField] private List<WheelCollider> frontWheelColliders;
-    [SerializeField] private List<WheelCollider> rearWheelColliders;
+    private List<WheelCollider> wheelColliders;
+    private List<WheelCollider> frontWheelColliders;
+    private List<WheelCollider> rearWheelColliders;
     [SerializeField] private BoxCollider mainCollider;
 
 
@@ -57,6 +57,12 @@ public class AIController : MonoBehaviour
         GetComponent<CheckpointManager>().onRaceFinished += OnRaceFinished;
 
         GameManager.Instance.onRaceStarted += startRace;
+
+        CarData carData = transform.GetChild(0).GetComponent<CarData>();
+        wheelColliders = carData.getWheelColliders();
+        frontWheelColliders = carData.getFrontWheelColliders();
+        rearWheelColliders = carData.getRearWheelColliders();
+
     }
 
     private void startRace(object sender, System.EventArgs e)

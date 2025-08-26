@@ -7,7 +7,7 @@ public class SetCameraShakeWithSpeed : MonoBehaviour
     [SerializeField] private Vector2 frequencyEdges;
     [SerializeField] private Vector2 speedEdges;
 
-    [SerializeField] private CinemachineBasicMultiChannelPerlin perlin;
+    private CinemachineBasicMultiChannelPerlin perlin;
 
     private Rigidbody rb;
 
@@ -16,6 +16,8 @@ public class SetCameraShakeWithSpeed : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         if (rb == null) Debug.Log("Rigidbody jest null w " + typeof(SetCameraShakeWithSpeed));
+
+        perlin = GameManager.Instance.getCurrentRacetrackData().getMainCinemachineCamera().GetComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     private void Update()

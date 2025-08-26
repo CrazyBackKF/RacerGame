@@ -4,4 +4,5 @@ using UnityEngine;
 public class MapsSO : ScriptableObject
 {
     public string mapName;
+    public int sceneIndex;
 }
