@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int maxLaps;
 
     public event EventHandler onRaceStarted;
+    public event EventHandler onRaceFinished;
     public event EventHandler onGameConfigurated;
 
     [SerializeField] private GameObject playerCarPrefab;
@@ -41,7 +42,8 @@ public class GameManager : MonoBehaviour
     {
         MainMenu,
         Countdown,
-        Race
+        Race,
+        Finish
     }
 
     public State currentState { get; private set; }
@@ -68,15 +70,12 @@ public class GameManager : MonoBehaviour
 
     private void SceneLoader_onLevelLoaded(object sender, EventArgs e)
     {
-        racetrackData = GameObject.Find("RacetrackData").GetComponent<RacetrackData>();
+        racetrackData = FindFirstObjectByType<RacetrackData>();
 
         playerCar = Instantiate(playerCarPrefab, racetrackData.getPlaces().GetChild(0).position, racetrackData.getPlaces().GetChild(0).rotation);
         GameObject carModel = Instantiate(carSOList[currentCarIndex].model, playerCar.transform);
 
         playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
-
-        racetrackData.getMainCinemachineCamera().Target.TrackingTarget = playerCar.transform;
-
 
         for (int i = 1; i <= botsNumber; i++)
         {
@@ -104,6 +103,7 @@ public class GameManager : MonoBehaviour
                 countdownTime += Time.deltaTime;
                 if (countdownTime >= startTimer)
                 {
+                    playerCar.GetComponent<CheckpointManager>().onRaceFinished += PlayerCar_onRaceFinished;
                     Inputs.Instance.changeCurrentInputMap("MainGameplay");
                     currentState = State.Race;
                     findCars();
@@ -129,6 +129,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void PlayerCar_onRaceFinished(object sender, EventArgs e)
+    {
+        currentState = State.Finish;
+
+        onRaceFinished?.Invoke(this, EventArgs.Empty);
+
+        playerCar.GetComponent<CheckpointManager>().onRaceFinished -= PlayerCar_onRaceFinished;
+    }
+
     private void findCars()
     {
         cars = new List<GameObject>();
@@ -138,6 +147,11 @@ public class GameManager : MonoBehaviour
         {
             cars.Add(car);
         }
+    }
+
+    public bool isGamePlaying()
+    {
+        return currentState == State.Race || currentState == State.Countdown;
     }
 
     public List<GameObject> getCarsList()
@@ -159,27 +173,6 @@ public class GameManager : MonoBehaviour
     {
         return racetrackData;
     }
-
-    public Transform getCurrentRaceTrack()
-    {
-        return racetrackData.getRaceTrack();
-    }
-
-    public Transform getCurrentCheckpoints()
-    {
-        return racetrackData.getCheckpoints();
-    }
-
-    public Transform getCurrentWaypoints()
-    {
-        return racetrackData.getWaypoints();
-    }
-
-    public Transform getCurrentFinishCameraPositions()
-    {
-        return racetrackData.getFinishCameraPositions();
-    }
-
     public List<CarsSO> getCarsSO()
     {
         return carSOList;
@@ -188,11 +181,6 @@ public class GameManager : MonoBehaviour
     public List<MapsSO> getMapsSO()
     {
         return mapSOList;
-    }
-
-    public Volume getGlobalVolume()
-    {
-        return racetrackData.getGlobalVolume();
     }
 
     public bool isPlayerRacing()

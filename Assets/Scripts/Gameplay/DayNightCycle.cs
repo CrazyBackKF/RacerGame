@@ -7,12 +7,13 @@ public class DayNightCycle : MonoBehaviour
     [System.Serializable]
     public class TimeOfDay
     {
+        public TimeOfDays timeOfDay;
         public string name;
         public Material skyboxMaterial;
         public float intensityValue;
     }
 
-    [SerializeField] private string timeOfDayName;
+    [SerializeField] private TimeOfDays currentTimeOfDay;
 
     [Header("Times Of Day")]
     [SerializeField] private List<TimeOfDay> timesOfDay;
@@ -32,9 +33,28 @@ public class DayNightCycle : MonoBehaviour
     [Header("Shaders")]
     [SerializeField] private List<Material> skyboxMaterials;
 
+    public enum TimeOfDays
+    {
+        BrightMorning,
+        Morning,
+        CloudyMorning,
+        Noon,
+        Afternoon,
+        EarlyDusk,
+        Sunset,
+        HaloEvening,
+        Night,
+        Midnight
+    }
+
     private void Start()
     {
-        changeTimeOfDay(timesOfDay.Find((time) => time.name == timeOfDayName));
+        SceneLoader.Instance.onLevelLoaded += SceneLoader_onLevelLoaded;
+    }
+
+    private void SceneLoader_onLevelLoaded(object sender, System.EventArgs e)
+    {
+        changeTimeOfDay(timesOfDay.Find((time) => time.timeOfDay == currentTimeOfDay));
     }
 
     private void changeTimeOfDay(TimeOfDay timeOfDay)

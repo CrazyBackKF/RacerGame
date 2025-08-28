@@ -19,6 +19,8 @@ public class PauseMenuManager : MonoBehaviour
 
     private void pauseOrUnpaseGame(bool isPaused)
     {
+        if (!GameManager.Instance.isGamePlaying()) return;
+
         isGamePaused = isPaused;
         UnityEngine.Cursor.lockState = isPaused ? CursorLockMode.None : CursorLockMode.Locked;
 

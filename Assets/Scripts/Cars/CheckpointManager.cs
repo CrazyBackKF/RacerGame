@@ -32,7 +32,7 @@ public class CheckpointManager : MonoBehaviour
     private void startRace(object sender, EventArgs e)
     {
         finished = false;
-        getCheckpoints(GameManager.Instance.getCurrentCheckpoints());
+        getCheckpoints(GameManager.Instance.getCurrentRacetrackData().getCheckpoints());
         hideCheckpoints(currentCheckpointIndex);
         maxLaps = GameManager.Instance.getMaxLaps();
         onRaceStarted?.Invoke(this, new OnRaceStartedAndOnLapFinishedEventArgs { lap = maxLaps });

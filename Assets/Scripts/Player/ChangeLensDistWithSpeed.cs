@@ -19,7 +19,7 @@ public class ChangeLensDistWithSpeed : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-        globalVolume = GameManager.Instance.getGlobalVolume();
+        globalVolume = GameManager.Instance.getCurrentRacetrackData().getGlobalVolume();
 
         if (rb == null) Debug.Log("Rigidbody jest null w skrypcie " + typeof(ChangeLensDistWithSpeed));
 

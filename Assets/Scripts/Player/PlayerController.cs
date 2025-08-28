@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
         isRaceStarted = true;
         distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
         wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
-        setNewWaypoints(GameManager.Instance.getCurrentWaypoints());
+        setNewWaypoints(GameManager.Instance.getCurrentRacetrackData().getWaypoints());
     }
 
     private void WaypointManager_onWaypointPassed(object sender, WaypointManager.OnWaypointPassedEventArgs e)

@@ -33,7 +33,7 @@ public class WaypointManager : MonoBehaviour
     private void startRace(object sender, EventArgs e)
     {
         isRaceStarted = true;
-        findWaypoints(GameManager.Instance.getCurrentWaypoints());
+        findWaypoints(GameManager.Instance.getCurrentRacetrackData().getWaypoints());
         maxLaps = GameManager.Instance.getMaxLaps();
         onWaypointPassed?.Invoke(this, new OnWaypointPassedEventArgs
         {

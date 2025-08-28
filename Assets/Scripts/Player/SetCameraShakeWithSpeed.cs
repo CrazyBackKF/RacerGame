@@ -17,7 +17,7 @@ public class SetCameraShakeWithSpeed : MonoBehaviour
 
         if (rb == null) Debug.Log("Rigidbody jest null w " + typeof(SetCameraShakeWithSpeed));
 
-        perlin = GameManager.Instance.getCurrentRacetrackData().getMainCinemachineCamera().GetComponent<CinemachineBasicMultiChannelPerlin>();
+        perlin = CinemachineCameraManager.Instance.getMainCinemachineCamera().GetComponent<CinemachineBasicMultiChannelPerlin>();
     }
 
     private void Update()

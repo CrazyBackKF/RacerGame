@@ -20,10 +20,13 @@ public class AIController : MonoBehaviour
     [SerializeField] private float maxBoxcastDistance;
 
     [Header("Max speeds")]
-    [SerializeField] private float normalMaxSpeed;
-    [SerializeField] private float turnMaxSpeed;
-    [SerializeField] private float sharpTurnMaxSpeed;
     [SerializeField] private float speedChangeSpeed;
+    [SerializeField] private Vector2 normalMaxSpeedRandom;
+    [SerializeField] private Vector2 turnMaxSpeedRandom;
+    [SerializeField] private Vector2 sharpTurnMaxSpeedRandom;
+    private float normalMaxSpeed;
+    private float turnMaxSpeed;
+    private float sharpTurnMaxSpeed;
     private float currentMaxSpeed;
 
     [Header("Layer masks")]
@@ -50,9 +53,17 @@ public class AIController : MonoBehaviour
     private Coroutine raceCoroutine;
 
     Vector3 currentTarget;
+
+    private void Awake()
+    {
+        normalMaxSpeed = Random.Range(normalMaxSpeedRandom.x, normalMaxSpeedRandom.y);
+        turnMaxSpeed = Random.Range(turnMaxSpeedRandom.x, turnMaxSpeedRandom.y);
+        sharpTurnMaxSpeed = Random.Range(sharpTurnMaxSpeedRandom.x, sharpTurnMaxSpeedRandom.y);
+    }
+
     private void Start()
     {
-        GameManager.Instance.getPlayerCar().GetComponent<CheckpointManager>().onRaceFinished += OnPlayerRaceFinished;
+        GameManager.Instance.onRaceFinished += OnPlayerRaceFinished;
         GetComponent<WaypointManager>().onWaypointPassed += WaypointManager_onWaypointPassed;
         GetComponent<CheckpointManager>().onRaceFinished += OnRaceFinished;
 
@@ -69,7 +80,7 @@ public class AIController : MonoBehaviour
     {
         distanceBetweenFrontWheels = Vector3.Distance(frontWheelColliders[0].transform.position, frontWheelColliders[1].transform.position);
         wheelbase = Vector3.Distance(frontWheelColliders[0].transform.position, rearWheelColliders[0].transform.position);
-        setNewWaypoints(GameManager.Instance.getCurrentWaypoints());
+        setNewWaypoints(GameManager.Instance.getCurrentRacetrackData().getWaypoints());
         raceCoroutine = StartCoroutine(race());
     }
 
@@ -78,7 +89,7 @@ public class AIController : MonoBehaviour
         GameObject player = GameManager.Instance.getPlayerCar();
         if (player != null)
         {
-            player.GetComponent<CheckpointManager>().onRaceFinished -= OnPlayerRaceFinished;
+            GameManager.Instance.onRaceFinished -= OnPlayerRaceFinished;
         }
         GetComponent<WaypointManager>().onWaypointPassed -= WaypointManager_onWaypointPassed;
         GetComponent<CheckpointManager>().onRaceFinished -= OnRaceFinished;

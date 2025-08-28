@@ -6,13 +6,6 @@ public class LapsTextManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI currentLap;
     [SerializeField] private TextMeshProUGUI allLaps;
 
-    private Canvas canvas;
-
-    private void Awake()
-    {
-        canvas = GetComponent<Canvas>();
-    }
-
     private void Start()
     {
         GameManager.Instance.onGameConfigurated += GameManager_onGameConfigurated;
@@ -29,11 +22,11 @@ public class LapsTextManager : MonoBehaviour
 
     private void Show()
     {
-        canvas.enabled = true;
+        gameObject.SetActive(true);
     }
 
     private void Hide()
     {
-        canvas.enabled = false;
+        gameObject.SetActive(false);
     }
 }

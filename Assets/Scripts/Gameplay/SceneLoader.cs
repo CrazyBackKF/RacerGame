@@ -22,17 +22,17 @@ public class SceneLoader : MonoBehaviour
 
     private IEnumerator loadSceneAsync(int index)
     {
-        AsyncOperation sceneLoadingOperation = SceneManager.LoadSceneAsync(index, LoadSceneMode.Single);
+        int GameSceneIndex = 1;
+        AsyncOperation uiLoad = SceneManager.LoadSceneAsync(GameSceneIndex, LoadSceneMode.Single);
 
-        while (!sceneLoadingOperation.isDone)
+        while (!uiLoad.isDone)
         {
             yield return null;
         }
 
-        int UISceneIndex = 1;
-        AsyncOperation uiLoad = SceneManager.LoadSceneAsync(UISceneIndex, LoadSceneMode.Additive);
+        AsyncOperation sceneLoadingOperation = SceneManager.LoadSceneAsync(index, LoadSceneMode.Additive);
 
-        while (!uiLoad.isDone)
+        while (!sceneLoadingOperation.isDone)
         {
             yield return null;
         }

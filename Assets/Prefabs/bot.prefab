@@ -84,7 +84,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &1368994944501951629
@@ -138,10 +138,10 @@ MonoBehaviour:
   checkForOtherCarsRadius: 7
   avoidOtherCarsAngle: 10
   maxBoxcastDistance: 20
-  normalMaxSpeed: 40
-  turnMaxSpeed: 20
-  sharpTurnMaxSpeed: 10
   speedChangeSpeed: 20
+  normalMaxSpeedRandom: {x: 20, y: 40}
+  turnMaxSpeedRandom: {x: 15, y: 20}
+  sharpTurnMaxSpeedRandom: {x: 7, y: 10}
   carLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2308e3cfdc98af448be68be4b0e83aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0
+  minDistance: 10
   isPlayer: 0
   checkpointManager: {fileID: 8127612446239921585}
 --- !u!114 &8127612446239921585
