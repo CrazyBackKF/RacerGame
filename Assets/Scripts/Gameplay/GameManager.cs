@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -74,6 +75,7 @@ public class GameManager : MonoBehaviour
 
         playerCar = Instantiate(playerCarPrefab, racetrackData.getPlaces().GetChild(0).position, racetrackData.getPlaces().GetChild(0).rotation);
         GameObject carModel = Instantiate(carSOList[currentCarIndex].model, playerCar.transform);
+        playerCar.GetComponent<CarsInGameStats>().carSO = carSOList[currentCarIndex];
 
         playerCheckpointManager = playerCar.GetComponent<CheckpointManager>();
 
@@ -143,9 +145,14 @@ public class GameManager : MonoBehaviour
         cars = new List<GameObject>();
         GameObject[] carsArr = GameObject.FindGameObjectsWithTag("car");
 
-        foreach (GameObject car in carsArr)
+        string[] botNames = { "bot1", "bot2", "bot3" };
+
+        for (int i = 0; i < carsArr.Length; i++)
         {
-            cars.Add(car);
+            CarsInGameStats carInGameStats = carsArr[i].GetComponent<CarsInGameStats>();
+            carInGameStats.playerName = botNames[i % botNames.Length];
+
+            cars.Add(carsArr[i]);
         }
     }
 

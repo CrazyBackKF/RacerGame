@@ -45,7 +45,7 @@ public class TimerTextManager : MonoBehaviour
     {
         while (true)
         {
-            timerText.text = timeToText((int)time);
+            timerText.text = FrequentFunctions.timeToText((int)time);
             time += Time.deltaTime;
             yield return null;
         }
@@ -56,17 +56,5 @@ public class TimerTextManager : MonoBehaviour
         timerText.text = "00.00";
     }
 
-    private string timeToText(int time)
-    {
-        int minutes = time / 60;
-        int seconds = time % 60;
-
-        string minutesString = minutes.ToString();
-        string secondsString = seconds.ToString();
-
-        if (minutes < 10) minutesString = "0" + minutesString;
-        if (seconds < 10) secondsString = "0" + secondsString;
-
-        return (minutesString + "." + secondsString);
-    }
+    
 }

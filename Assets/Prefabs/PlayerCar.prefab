@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1931223251913680491}
   - component: {fileID: 6231807098244292179}
   - component: {fileID: 7812373015764561852}
+  - component: {fileID: 520284107630198431}
   m_Layer: 6
   m_Name: PlayerCar
   m_TagString: car
@@ -196,3 +197,17 @@ MonoBehaviour:
   amplitudeEdges: {x: 0, y: 0.3}
   frequencyEdges: {x: 0.5, y: 5}
   speedEdges: {x: 30, y: 40}
+--- !u!114 &520284107630198431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411234226092521349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f0dbdebe1873044815d582e8d0b87b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarsInGameStats
+  playerName: 
+  carSO: {fileID: 0}

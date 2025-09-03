@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3700710466506518061}
   - component: {fileID: 4045794084016835882}
   - component: {fileID: 8127612446239921585}
+  - component: {fileID: 6707555630658886688}
   m_Layer: 6
   m_Name: bot
   m_TagString: car
@@ -175,6 +176,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer: 0
+--- !u!114 &6707555630658886688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 416024687555981859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f0dbdebe1873044815d582e8d0b87b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarsInGameStats
+  playerName: 
+  carSO: {fileID: 11400000, guid: b5d9fff54f1f023499712ec33d390cc9, type: 2}
 --- !u!1001 &278385924071580071
 PrefabInstance:
   m_ObjectHideFlags: 0
