@@ -128,6 +128,8 @@ public class GameManager : MonoBehaviour
                     return bWaypoints.CompareTo(aWaypoints);
                 });
                 break;
+            case State.Finish:
+                break;
         }
     }
 
@@ -150,7 +152,14 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < carsArr.Length; i++)
         {
             CarsInGameStats carInGameStats = carsArr[i].GetComponent<CarsInGameStats>();
-            carInGameStats.playerName = botNames[i % botNames.Length];
+            if (carsArr[i] == playerCar)
+            {
+                carInGameStats.playerName = "Do zmiany w GameManager:155";
+            }
+            else
+            {
+                carInGameStats.playerName = botNames[i % botNames.Length];
+            }
 
             cars.Add(carsArr[i]);
         }

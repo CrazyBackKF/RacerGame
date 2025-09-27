@@ -17,7 +17,14 @@ public class SceneLoader : MonoBehaviour
 
     public void loadLevel(int index)
     {
+        Time.timeScale = 1;
         StartCoroutine(loadSceneAsync(index));
+    }
+
+    public void loadMainMenu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
     }
 
     private IEnumerator loadSceneAsync(int index)

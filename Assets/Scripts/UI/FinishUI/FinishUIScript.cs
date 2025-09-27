@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,21 +13,36 @@ public class FinishUIScript : MonoBehaviour
     [SerializeField] private GameObject leaderboardsEntry;
     [SerializeField] private Transform placesTransform;
     [SerializeField] private float timeScaleDropSpeed;
+    [SerializeField] private Button nextButton;
+
+    [SerializeField] private GameObject[] gameObjectsToHide;
 
     private void Start()
     {
-        Player_onRaceFinished(this, System.EventArgs.Empty);
-
         GameManager.Instance.onGameConfigurated += GameManager_onGameConfigurated;
+        nextButton.onClick.AddListener(() =>
+        {
+            SceneLoader.Instance.loadMainMenu();
+        });
     }
 
-    private void GameManager_onGameConfigurated(object sender, System.EventArgs e)
+    private void GameManager_onGameConfigurated(object sender, EventArgs e)
     {
         GameManager.Instance.onRaceFinished += Player_onRaceFinished;
     }
 
-    private void Player_onRaceFinished(object sender, System.EventArgs e)
+    private void finishRaceTest()
     {
+        Player_onRaceFinished(this, EventArgs.Empty);
+    }
+
+    private void Player_onRaceFinished(object sender, EventArgs e)
+    {
+        foreach (GameObject gameObject in gameObjectsToHide)
+        {
+            gameObject.SetActive(false);
+        }
+
         LTSeq seq = LeanTween.sequence();
 
         seq.append(LeanTween.value(1f, 0f, 5f)
@@ -41,7 +56,7 @@ public class FinishUIScript : MonoBehaviour
 
         seq.append(LeanTween.value(0, money, 0.0003f * money)
             .setIgnoreTimeScale(true)
-            .setOnUpdate((float value) => moneyTextMesh.text = "+$ " + ((int)value).ToString()));
+            .setOnUpdate((float value) => moneyTextMesh.text = "+$" + ((int)value).ToString()));
 
         seq.append(2f);
 
@@ -51,6 +66,7 @@ public class FinishUIScript : MonoBehaviour
             {
                 finishMoneyUI.gameObject.SetActive(false);
                 leaderboards.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
 
                 fillLeaderboards();
             }));

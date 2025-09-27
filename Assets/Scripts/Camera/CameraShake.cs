@@ -6,19 +6,9 @@ public class CameraShake : MonoBehaviour
 {
     public static CameraShake Instance { get; private set; }
 
-    private CinemachineBrain cinemachineBrain;
-    private CinemachineCamera activeCamera;
-    private CinemachineBasicMultiChannelPerlin activePerlin;
-
     private void Awake()
     {
         Instance = this;
-    }
-
-    private void Start()
-    {
-        cinemachineBrain = Camera.main.GetComponent<CinemachineBrain>();
-        setCurrentCamera();
     }
 
     public void setCameraShake(float amplitude, float frequency, CinemachineBasicMultiChannelPerlin perlin)
@@ -41,11 +31,5 @@ public class CameraShake : MonoBehaviour
 
         perlin.AmplitudeGain = 0;
         perlin.FrequencyGain = 0;
-    }
-
-    private void setCurrentCamera()
-    {
-        activeCamera = cinemachineBrain.ActiveVirtualCamera as CinemachineCamera;
-        activePerlin = activeCamera.gameObject.GetComponent<CinemachineBasicMultiChannelPerlin>();
     }
 }
