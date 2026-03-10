@@ -42,7 +42,7 @@ Projekt jest w fazie wczesnej i posiada podstawowe funkcje rozgrywki, które bę
 
 ## ▶️ Jak uruchomić
 
-1. Uruchom gotowego builda, który znajduje się w folderze "Build"
+1. Uruchom gotowego builda, który znajduje się w folderze "GameBuild"
 2. Albo sklonuj repozytorium:
 
 ```bash
