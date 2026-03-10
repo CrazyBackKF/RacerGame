@@ -20,8 +20,6 @@ Projekt jest w fazie wczesnej i posiada podstawowe funkcje rozgrywki, które bę
 - **Mapa**: 1 tor wyścigowy (stworzone przez innych autorów, szczegóły w oddzielnym pliku z licencjami/creditami)  
 - **Samochód**: 1 pojazd do testów (autorzy w oddzielnym pliku)  
 
-> Wszystkie modele 3D oraz assety wykorzystane w prototypie pochodzą od autorów zewnętrznych i nie są dołączone do repo ze względu na licencję.
-
 ---
 
 ## ⚙️ Technologie
